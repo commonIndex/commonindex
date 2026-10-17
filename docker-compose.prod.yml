@@ -1,0 +1,170 @@
+# CommonIndex — a deployment, not a demo (docs/deploy.md).
+#
+#   cp deploy/prod.env.example .env      # then fill it in
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# What differs from docker-compose.full.yml (the local demo):
+# * no sample workspace and no built-in token — people sign in; the first
+#   admin is COMMONINDEX_ADMIN_EMAIL, and the gateway's log prints a one-time
+#   sign-in link for them on first start;
+# * the web app is a static build behind nginx, on the same origin as the API;
+# * every secret comes from .env, nothing is generated into a shared volume;
+# * it listens on one port; put TLS in front of it.
+#
+# Profiles:  code — Zoekt for code search across indexed repositories.
+# Video rendering: set GATEWAY_TARGET=video in .env (builds Chromium and ffmpeg
+# into the gateway image from your OS packages; docs/videos.md).
+name: ${COMPOSE_PROJECT_NAME:-commonindex-prod}
+
+x-gateway-env: &gateway-env
+  COMMONINDEX_DSN: postgresql://commonindex:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/commonindex
+  COMMONINDEX_SECRET_KEY: ${COMMONINDEX_SECRET_KEY:?set COMMONINDEX_SECRET_KEY in .env}
+  COMMONINDEX_PUBLIC_URL: ${COMMONINDEX_PUBLIC_URL:?set COMMONINDEX_PUBLIC_URL in .env}
+  COMMONINDEX_ORIGINS: ${COMMONINDEX_PUBLIC_URL}
+  # Browsers reach the gateway at the app's own address: the web server passes
+  # /api, /auth and /share to it (web/nginx.conf). Single sign-on's callback is
+  # built from this; unset, it was http://localhost:8000.
+  COMMONINDEX_GATEWAY_URL: ${COMMONINDEX_PUBLIC_URL}
+  COMMONINDEX_SPACE: ${COMMONINDEX_SPACE:-main}
+  COMMONINDEX_SPACE_NAME: ${COMMONINDEX_SPACE_NAME:-Workspace}
+  COMMONINDEX_ADMIN_EMAIL: ${COMMONINDEX_ADMIN_EMAIL:?set COMMONINDEX_ADMIN_EMAIL in .env}
+  COMMONINDEX_ADMIN_NAME: ${COMMONINDEX_ADMIN_NAME:-}
+  COMMONINDEX_SIGN_IN: ${COMMONINDEX_SIGN_IN:-required}
+  COMMONINDEX_JOIN_DOMAINS: ${COMMONINDEX_JOIN_DOMAINS:-}
+  COMMONINDEX_SSO_ISSUER: ${COMMONINDEX_SSO_ISSUER:-}
+  COMMONINDEX_SSO_CLIENT_ID: ${COMMONINDEX_SSO_CLIENT_ID:-}
+  COMMONINDEX_SSO_CLIENT_SECRET: ${COMMONINDEX_SSO_CLIENT_SECRET:-}
+  COMMONINDEX_SSO_NAME: ${COMMONINDEX_SSO_NAME:-}
+  COMMONINDEX_SMTP_HOST: ${COMMONINDEX_SMTP_HOST:-}
+  COMMONINDEX_SMTP_PORT: ${COMMONINDEX_SMTP_PORT:-587}
+  COMMONINDEX_SMTP_USER: ${COMMONINDEX_SMTP_USER:-}
+  COMMONINDEX_SMTP_PASSWORD: ${COMMONINDEX_SMTP_PASSWORD:-}
+  COMMONINDEX_MAIL_FROM: ${COMMONINDEX_MAIL_FROM:-}
+  COMMONINDEX_MAIL_LOG: ${COMMONINDEX_MAIL_LOG:-}
+  COMMONINDEX_LLM_BASE_URL: ${COMMONINDEX_LLM_BASE_URL:-}
+  COMMONINDEX_LLM_API_KEY: ${COMMONINDEX_LLM_API_KEY:-}
+  COMMONINDEX_LLM_MODEL: ${COMMONINDEX_LLM_MODEL:-}
+  COMMONINDEX_LLM_TIMEOUT_SECONDS: ${COMMONINDEX_LLM_TIMEOUT_SECONDS:-}
+  COMMONINDEX_EMBED_BASE_URL: ${COMMONINDEX_EMBED_BASE_URL:-}
+  COMMONINDEX_EMBED_API_KEY: ${COMMONINDEX_EMBED_API_KEY:-}
+  COMMONINDEX_EMBED_MODEL: ${COMMONINDEX_EMBED_MODEL:-}
+  COMMONINDEX_MODEL_PROVIDER: ${COMMONINDEX_MODEL_PROVIDER:-}
+  COMMONINDEX_MODEL_ID: ${COMMONINDEX_MODEL_ID:-}
+  COMMONINDEX_MODEL_API_KEY: ${COMMONINDEX_MODEL_API_KEY:-}
+  COMMONINDEX_MODEL_BASE_URL: ${COMMONINDEX_MODEL_BASE_URL:-}
+  COMMONINDEX_MEDIA_DIR: /media
+  # Media in a bucket instead of the media volume (docs/deploy.md, Media storage).
+  COMMONINDEX_MEDIA_STORE: ${COMMONINDEX_MEDIA_STORE:-local}
+  COMMONINDEX_MEDIA_BUCKET: ${COMMONINDEX_MEDIA_BUCKET:-}
+  COMMONINDEX_MEDIA_PREFIX: ${COMMONINDEX_MEDIA_PREFIX:-}
+  COMMONINDEX_MEDIA_ENDPOINT: ${COMMONINDEX_MEDIA_ENDPOINT:-}
+  COMMONINDEX_MEDIA_REGION: ${COMMONINDEX_MEDIA_REGION:-}
+  COMMONINDEX_MEDIA_ACCESS_KEY_ID: ${COMMONINDEX_MEDIA_ACCESS_KEY_ID:-}
+  COMMONINDEX_MEDIA_SECRET_ACCESS_KEY: ${COMMONINDEX_MEDIA_SECRET_ACCESS_KEY:-}
+  COMMONINDEX_CODE_CLONES: /code/clones
+  COMMONINDEX_ZOEKT_URL: ${COMMONINDEX_ZOEKT_URL:-}
+  # The zoekt-indexer sidecar builds code-search shards from the clones.
+  COMMONINDEX_ZOEKT_SIDECAR: "1"
+  # How often repositories added on the Code query page are indexed again.
+  COMMONINDEX_CODE_REFRESH_SECONDS: ${COMMONINDEX_CODE_REFRESH_SECONDS:-3600}
+
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: commonindex
+      POSTGRES_USER: commonindex
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes: [db:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U commonindex -d commonindex"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  # Every migration not yet applied, then exits. Safe to run on every start.
+  migrate:
+    build: {context: ., target: tools}
+    image: commonindex:tools
+    environment: {<<: *gateway-env}
+    command: ["python", "scripts/migrate.py"]
+    depends_on: {db: {condition: service_healthy}}
+    restart: "no"
+
+  gateway:
+    build: {context: ., target: "${GATEWAY_TARGET:-tools}"}
+    image: commonindex:${GATEWAY_TARGET:-tools}
+    restart: unless-stopped
+    # Background work runs in the worker below, not in the web server.
+    environment: {<<: *gateway-env, COMMONINDEX_WORKER: external}
+    command: ["uvicorn", "commonindex.gateway.app:app", "--host", "0.0.0.0", "--port", "8000",
+              "--proxy-headers", "--forwarded-allow-ips", "*"]
+    volumes:
+      - media:/media
+      - code:/code
+    depends_on: {migrate: {condition: service_completed_successfully}}
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request;urllib.request.urlopen('http://localhost:8000/api/v1/_ops')\""]
+      interval: 5s
+      timeout: 3s
+      retries: 40
+
+  # Video renders, page snapshots and code indexing (commonindex/workers/jobs.py),
+  # in the same image as the gateway — so with GATEWAY_TARGET=video it renders.
+  # Add replicas to run more at once; a job is only ever claimed by one.
+  worker:
+    image: commonindex:${GATEWAY_TARGET:-tools}
+    restart: unless-stopped
+    environment: {<<: *gateway-env}
+    command: ["python", "-m", "commonindex.workers.jobs"]
+    volumes:
+      - media:/media
+      - code:/code
+    depends_on: {gateway: {condition: service_healthy}}
+
+  web:
+    build: {context: ./web}
+    image: commonindex-web:local
+    restart: unless-stopped
+    ports: ["${BIND_ADDR:-0.0.0.0}:${HTTP_PORT:-8080}:80"]
+    depends_on: {gateway: {condition: service_healthy}}
+
+  # ── code search (profile: code) ────────────────────────────────────────
+  zoekt:
+    profiles: [code]
+    image: sourcegraph/zoekt-webserver:latest
+    platform: linux/amd64
+    restart: unless-stopped
+    volumes: [zoekt-index:/data/index]
+
+  # Rebuilds the search index from every repository the gateway has cloned
+  # (indexed from Code query's page). Unchanged repositories are cheap.
+  zoekt-indexer:
+    profiles: [code]
+    image: sourcegraph/zoekt-indexserver:latest
+    platform: linux/amd64
+    restart: unless-stopped
+    # How often the search index is rebuilt; 30 minutes unless .env says.
+    environment: {ZOEKT_EVERY_SECONDS: "${ZOEKT_EVERY_SECONDS:-1800}"}
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        git config --global --add safe.directory '*'
+        while true; do
+          # Clones sit at clones/<host>/<org>/<repo>.
+          find /code/clones -mindepth 2 -maxdepth 5 -type d -name .git | while read -r git; do
+            repo=$${git%/.git}
+            zoekt-git-index -index /data -branches "$$(git -C "$$repo" rev-parse --abbrev-ref HEAD)" "$$repo" || true
+          done
+          sleep $${ZOEKT_EVERY_SECONDS:-1800}
+        done
+    volumes:
+      - zoekt-index:/data
+      - code:/code:ro
+
+volumes:
+  db:
+  media:
+  code:
+  zoekt-index:

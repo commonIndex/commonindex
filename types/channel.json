@@ -1,0 +1,27 @@
+{
+  "id": "channel",
+  "label": "Channel",
+  "plural": "Channels",
+  "schema": {
+    "type": "object",
+    "required": ["name"],
+    "properties": {
+      "name":  { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,39}$",
+                 "description": "Lowercase words joined by hyphens, unique in the space: refund-incidents." },
+      "topic": { "type": ["string", "null"], "maxLength": 200,
+                 "description": "What the channel is for — the line people browse by." }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "name",
+    "subtitle": ["topic"],
+    "preview": "topic"
+  },
+  "facets": [],
+  "measures": [],
+  "prose": ["name", "topic"],
+  "relations": [],
+  "version": 1,
+  "status": "ratified"
+}

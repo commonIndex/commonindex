@@ -1,0 +1,38 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+
+# the frontend
+# Also ignore dependency symlinks used by local worktrees.
+node_modules
+web/dist/
+*.tsbuildinfo
+build/
+.DS_Store
+
+# The generated data-context skill. A snapshot of a registry that moves, written
+# by `make skill`; committing it would be the stale second copy the whole design
+# argues against.
+.claude/skills/
+warehouse-context.zip
+# Settings and secrets: the deploy guide's .env, and any local variant.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+deploy/k8s/local/secret.yaml
+
+# Real k8s secrets. secret.yaml.example is the committed template.
+deploy/k8s/local/secret.yaml
+
+# Rendered videos (COMMONINDEX_MEDIA_DIR)
+.media/
+.local-logs/
+
+# Clones of repositories indexed by URL (COMMONINDEX_CODE_CLONES)
+.code-clones/

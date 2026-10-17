@@ -1,0 +1,17 @@
+# Non-secret configuration. Credentials live in secret.yaml (gitignored;
+# secret.yaml.example is the committed template) — never here.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: commonindex-config
+  namespace: commonindex-local
+data:
+  POSTGRES_DB: commonindex_local
+  POSTGRES_USER: commonindex
+  COMMONINDEX_ORIGINS: "http://localhost:5173"
+
+  # One entry per (org, repo, branch) Code Query pulls. Defaults to this repo,
+  # so a local cluster proves out the pipeline with zero external config —
+  # Point it at a real org/repo to index something else.
+  CODEQUERY_REPOS: |
+    [{"org": "commonindex", "repo": "commonindex", "branch": "main", "space_id": "pay"}]

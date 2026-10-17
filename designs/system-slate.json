@@ -1,0 +1,164 @@
+{
+  "title": "System · Slate",
+  "surface": "email",
+  "state": "approved",
+  "cites": [],
+  "spec": {
+    "tokens": {
+      "color.bg": {
+        "$value": "#ffffff",
+        "$type": "color"
+      },
+      "color.surface": {
+        "$value": "#f1f4f7",
+        "$type": "color"
+      },
+      "color.text": {
+        "$value": "#0f1620",
+        "$type": "color"
+      },
+      "color.muted": {
+        "$value": "#5d6b7a",
+        "$type": "color"
+      },
+      "color.accent": {
+        "$value": "#2f6bed",
+        "$type": "color"
+      },
+      "color.onAccent": {
+        "$value": "#ffffff",
+        "$type": "color"
+      },
+      "color.border": {
+        "$value": "#dfe5ec",
+        "$type": "color"
+      },
+      "radius.md": {
+        "$value": 8,
+        "$type": "dimension"
+      },
+      "font.size.heading": {
+        "$value": 26,
+        "$type": "dimension"
+      },
+      "font.size.body": {
+        "$value": 13.5,
+        "$type": "dimension"
+      }
+    },
+    "screens": [
+      {
+        "id": "specimen",
+        "name": "Slate",
+        "w": 600,
+        "h": 420,
+        "elements": [
+          {
+            "id": "h",
+            "role": "heading",
+            "x": 40,
+            "y": 44,
+            "w": 520,
+            "h": 40,
+            "text": "Slate",
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "s",
+            "role": "body",
+            "x": 40,
+            "y": 92,
+            "w": 520,
+            "h": 20,
+            "text": "Cool neutral, tight radius. Built for dense product surfaces.",
+            "cites": "color.muted"
+          },
+          {
+            "id": "d1",
+            "role": "divider",
+            "x": 40,
+            "y": 128,
+            "w": 520,
+            "h": 1,
+            "cites": "color.border"
+          },
+          {
+            "id": "l",
+            "role": "field-label",
+            "x": 40,
+            "y": 152,
+            "w": 200,
+            "h": 14,
+            "text": "INPUT",
+            "cites": "color.muted"
+          },
+          {
+            "id": "i",
+            "role": "input",
+            "x": 40,
+            "y": 172,
+            "w": 300,
+            "h": 46,
+            "text": "you@example.com",
+            "cites": "color.border"
+          },
+          {
+            "id": "b1",
+            "role": "button",
+            "x": 356,
+            "y": 172,
+            "w": 100,
+            "h": 46,
+            "text": "Primary",
+            "cites": "color.accent",
+            "tone": "accent"
+          },
+          {
+            "id": "b2",
+            "role": "button",
+            "x": 464,
+            "y": 172,
+            "w": 96,
+            "h": 46,
+            "text": "Quiet",
+            "cites": "color.surface",
+            "tone": "muted"
+          },
+          {
+            "id": "bd",
+            "role": "badge",
+            "x": 40,
+            "y": 240,
+            "w": 90,
+            "h": 24,
+            "text": "Badge",
+            "cites": "color.accent",
+            "tone": "accent"
+          },
+          {
+            "id": "c",
+            "role": "card",
+            "x": 40,
+            "y": 284,
+            "w": 250,
+            "h": 96,
+            "text": "Surface",
+            "cites": "radius.md"
+          },
+          {
+            "id": "c2",
+            "role": "card",
+            "x": 310,
+            "y": 284,
+            "w": 250,
+            "h": 96,
+            "text": "Border & radius",
+            "cites": "radius.md"
+          }
+        ]
+      }
+    ]
+  },
+  "template_kind": "system",
+  "description": "Cool neutral, tight radius. Built for dense product surfaces."
+}

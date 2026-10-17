@@ -1,0 +1,49 @@
+{
+  "id": "code_file",
+  "label": "Code file",
+  "plural": "CodeFiles",
+  "doc": [
+    "One row per file at HEAD of an indexed branch — a pointer to current",
+    "state, not a per-commit history (the repo itself is that history; sha is",
+    "how a chunk cites the exact version it was read at).",
+    "",
+    "F3's granularity is file, symbol and chunk-embedding. This type carries",
+    "the file level. Symbol-level chunking needs a chunk strategy that varies",
+    "by object type, which nothing in the registry expresses yet (`prose` says",
+    "WHICH fields are natural language, not HOW to split one into chunks) — so",
+    "today `body` is chunked by whatever generic recipe the indexer applies to",
+    "any prose field, and per-symbol splitting is a named next step, not a",
+    "silent approximation."
+  ],
+  "schema": {
+    "type": "object",
+    "required": ["repo_id", "path", "sha"],
+    "properties": {
+      "repo_id": { "type": "string", "x-ref": "code_repo" },
+      "path": { "type": "string" },
+      "language": { "type": ["string", "null"] },
+      "sha": {
+        "type": "string",
+        "description": "The blob's commit SHA — a free join key: the same value a PR, a check and a deploy already carry, so an edge to any of them costs no new correlation."
+      },
+      "size": { "type": ["integer", "null"] },
+      "body": { "type": "string", "description": "Full file text at this sha. The prose field — this is what gets chunked and embedded." }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "path",
+    "subtitle": ["repo_id", "language"],
+    "preview": "sha"
+  },
+  "facets": [
+    { "kind": "enum", "field": "language" },
+    { "kind": "enum", "field": "repo_id" }
+  ],
+  "measures": [],
+  "prose": ["body"],
+  "relations": ["code_file.touches.pr", "code_file.touches.decision", "code_file.touches.doc"],
+  "version": 1,
+  "status": "ratified",
+  "propose_relation": "admin"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "dashboard",
+  "label": "Dashboard",
+  "plural": "Dashboards",
+  "schema": {
+    "type": "object",
+    "required": ["title", "space"],
+    "properties": {
+      "title":      { "type": "string" },
+      "space":      { "type": "string" },
+      "owner":      { "type": "string" },
+      "refresh":    { "type": "string" },
+      "panel_count":{ "type": "integer" },
+      "certified":  {
+        "type": "boolean",
+        "description": "Computed from the panels on read, never set by hand. A badge someone can toggle is a badge that means nothing."
+      },
+      "metrics":    { "type": "array", "items": { "type": "string" } }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "title",
+    "subtitle": ["space"],
+    "preview": "metrics",
+    "status": "certified"
+  },
+  "facets": [
+    { "field": "space",     "kind": "enum" },
+    { "field": "certified", "kind": "enum", "values": ["true", "false"], "attention": ["false"] },
+    { "field": "owner",     "kind": "actor" }
+  ],
+  "measures": [
+    { "name": "panels", "field": "panel_count", "agg": "sum" }
+  ],
+  "prose": ["title"],
+  "parts": ["panels", "decisions"],
+  "relations": ["dashboard.cites.metric"],
+  "version": 1,
+  "status": "ratified",
+  "_note": "prose is title only: a dashboard has no body text of its own. What it shows is its panels — which definition each charts, and how — and those are indexed with it as parts, so a dashboard is found by what it measures, not only by its name."
+}

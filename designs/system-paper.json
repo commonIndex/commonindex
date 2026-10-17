@@ -1,0 +1,164 @@
+{
+  "title": "System · Paper",
+  "surface": "email",
+  "state": "approved",
+  "cites": [],
+  "spec": {
+    "tokens": {
+      "color.bg": {
+        "$value": "#fdfdfc",
+        "$type": "color"
+      },
+      "color.surface": {
+        "$value": "#f4f4f2",
+        "$type": "color"
+      },
+      "color.text": {
+        "$value": "#1a1a19",
+        "$type": "color"
+      },
+      "color.muted": {
+        "$value": "#6e6e6a",
+        "$type": "color"
+      },
+      "color.accent": {
+        "$value": "#5b3fd1",
+        "$type": "color"
+      },
+      "color.onAccent": {
+        "$value": "#ffffff",
+        "$type": "color"
+      },
+      "color.border": {
+        "$value": "#e5e5e1",
+        "$type": "color"
+      },
+      "radius.md": {
+        "$value": 10,
+        "$type": "dimension"
+      },
+      "font.size.heading": {
+        "$value": 29,
+        "$type": "dimension"
+      },
+      "font.size.body": {
+        "$value": 14.5,
+        "$type": "dimension"
+      }
+    },
+    "screens": [
+      {
+        "id": "specimen",
+        "name": "Paper",
+        "w": 600,
+        "h": 420,
+        "elements": [
+          {
+            "id": "h",
+            "role": "heading",
+            "x": 40,
+            "y": 44,
+            "w": 520,
+            "h": 40,
+            "text": "Paper",
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "s",
+            "role": "body",
+            "x": 40,
+            "y": 92,
+            "w": 520,
+            "h": 20,
+            "text": "Near-monochrome with a violet accent. Reading first.",
+            "cites": "color.muted"
+          },
+          {
+            "id": "d1",
+            "role": "divider",
+            "x": 40,
+            "y": 128,
+            "w": 520,
+            "h": 1,
+            "cites": "color.border"
+          },
+          {
+            "id": "l",
+            "role": "field-label",
+            "x": 40,
+            "y": 152,
+            "w": 200,
+            "h": 14,
+            "text": "INPUT",
+            "cites": "color.muted"
+          },
+          {
+            "id": "i",
+            "role": "input",
+            "x": 40,
+            "y": 172,
+            "w": 300,
+            "h": 46,
+            "text": "you@example.com",
+            "cites": "color.border"
+          },
+          {
+            "id": "b1",
+            "role": "button",
+            "x": 356,
+            "y": 172,
+            "w": 100,
+            "h": 46,
+            "text": "Primary",
+            "cites": "color.accent",
+            "tone": "accent"
+          },
+          {
+            "id": "b2",
+            "role": "button",
+            "x": 464,
+            "y": 172,
+            "w": 96,
+            "h": 46,
+            "text": "Quiet",
+            "cites": "color.surface",
+            "tone": "muted"
+          },
+          {
+            "id": "bd",
+            "role": "badge",
+            "x": 40,
+            "y": 240,
+            "w": 90,
+            "h": 24,
+            "text": "Badge",
+            "cites": "color.accent",
+            "tone": "accent"
+          },
+          {
+            "id": "c",
+            "role": "card",
+            "x": 40,
+            "y": 284,
+            "w": 250,
+            "h": 96,
+            "text": "Surface",
+            "cites": "radius.md"
+          },
+          {
+            "id": "c2",
+            "role": "card",
+            "x": 310,
+            "y": 284,
+            "w": 250,
+            "h": 96,
+            "text": "Border & radius",
+            "cites": "radius.md"
+          }
+        ]
+      }
+    ]
+  },
+  "template_kind": "system",
+  "description": "Near-monochrome with a violet accent. Reading first."
+}

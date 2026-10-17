@@ -1,0 +1,56 @@
+{
+  "id": "code_repo",
+  "label": "Code repo",
+  "plural": "CodeRepos",
+  "doc": [
+    "One row per repository Code Query has been pointed at. This is the",
+    "connector-health object: a stalled or",
+    "failing pull shows up here rather than in a dashboard nobody owns, so it",
+    "is an inbox item like anything else that needs a human.",
+    "",
+    "last_indexed_sha is the cursor the git connector's `pull` resumes from —",
+    "not a version of this object, a pointer into the repo's own history."
+  ],
+  "schema": {
+    "type": "object",
+    "required": ["provider", "org", "repo", "default_branch"],
+    "properties": {
+      "provider": {
+        "enum": ["github", "local"],
+        "description": "Which connector produced this repo. \"local\" is a clone on disk read by commonindex/workers/connectors/localgit.py — a real source, not a fixture: Zoekt indexes a git directory natively, and a self-hosted forge is reachable by clone long before anyone writes an API connector for it."
+      },
+      "org": { "type": "string" },
+      "repo": { "type": "string" },
+      "default_branch": { "type": "string" },
+      "health": { "enum": ["ok", "lagging", "failing"] },
+      "last_indexed_sha": {
+        "type": ["string", "null"],
+        "description": "The pull cursor. Null before the first successful pull."
+      },
+      "last_indexed_at": { "type": ["string", "null"], "format": "date-time" },
+      "acl_crawled_at": {
+        "type": ["string", "null"],
+        "format": "date-time",
+        "description": "N1 rule 2 — crawled on its own, faster-than-content cadence, tracked separately from last_indexed_at so staleness on either dimension is visible on its own."
+      }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "repo",
+    "subtitle": ["org", "default_branch"],
+    "preview": "last_indexed_sha",
+    "status": "health"
+  },
+  "facets": [
+    { "kind": "enum", "field": "provider" },
+    { "kind": "enum", "field": "health", "attention": ["lagging", "failing"] },
+    { "kind": "enum", "field": "org" }
+  ],
+  "measures": [],
+  "prose": [],
+  "relations": [],
+  "version": 2,
+  "status": "ratified",
+  "propose_relation": "admin"
+}

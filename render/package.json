@@ -1,0 +1,10 @@
+{
+  "name": "commonindex-render",
+  "private": true,
+  "description": "The video renderer the gateway runs: render.mjs drives Chromium through playwright-core (Apache-2.0), pinned. ffmpeg is not a dependency — the deployment provides it (docs/videos.md).",
+  "license": "SEE LICENSE IN ../LICENSE.md",
+  "dependencies": {
+    "playwright-core": "1.64.1"
+  },
+  "type": "module"
+}

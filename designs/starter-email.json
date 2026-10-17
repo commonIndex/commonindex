@@ -1,0 +1,337 @@
+{
+  "title": "Starter · Transactional email",
+  "description": "An order receipt and shipping update with itemized totals, delivery details, and linked tracking.",
+  "template_kind": "layout",
+  "surface": "email",
+  "state": "approved",
+  "cites": [],
+  "spec": {
+    "tokens": {
+      "color.bg": {
+        "$type": "color",
+        "$value": "#fffdfa"
+      },
+      "color.surface": {
+        "$type": "color",
+        "$value": "#f3f6fa"
+      },
+      "color.text": {
+        "$type": "color",
+        "$value": "#172033"
+      },
+      "color.muted": {
+        "$type": "color",
+        "$value": "#64748b"
+      },
+      "color.accent": {
+        "$type": "color",
+        "$value": "#3159dc"
+      },
+      "color.onAccent": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "color.border": {
+        "$type": "color",
+        "$value": "#dde5ee"
+      },
+      "color.danger": {
+        "$type": "color",
+        "$value": "#c2413a"
+      },
+      "radius.md": {
+        "$type": "dimension",
+        "$value": 14
+      },
+      "font.size.body": {
+        "$type": "dimension",
+        "$value": 15
+      },
+      "font.size.heading": {
+        "$type": "dimension",
+        "$value": 28
+      }
+    },
+    "screens": [
+      {
+        "id": "receipt",
+        "name": "Order receipt",
+        "w": 600,
+        "h": 860,
+        "elements": [
+          {
+            "id": "brand",
+            "role": "logo",
+            "text": "Example Co Goods",
+            "x": 40,
+            "y": 36,
+            "w": 520,
+            "h": 32,
+            "cites": "color.accent"
+          },
+          {
+            "id": "order-status",
+            "role": "badge",
+            "text": "ORDER CONFIRMED",
+            "x": 40,
+            "y": 100,
+            "w": 166,
+            "h": 28,
+            "cites": "color.accent"
+          },
+          {
+            "id": "thanks",
+            "role": "heading",
+            "text": "Thanks for your order, Maya.",
+            "x": 40,
+            "y": 148,
+            "w": 520,
+            "h": 76,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "reference",
+            "role": "body",
+            "text": "Order NW-4821 · We’ll email you when it ships.",
+            "x": 40,
+            "y": 230,
+            "w": 520,
+            "h": 28,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "items",
+            "role": "card",
+            "x": 40,
+            "y": 294,
+            "w": 520,
+            "h": 164,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 12,
+            "pad": 22,
+            "children": [
+              {
+                "id": "items-label",
+                "role": "field-label",
+                "text": "YOUR ORDER",
+                "w": 472,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "item-mugs",
+                "role": "body",
+                "text": "Stoneware mug × 2 — $48.00",
+                "w": 472,
+                "h": 32,
+                "cites": "color.text"
+              },
+              {
+                "id": "item-coffee",
+                "role": "body",
+                "text": "House blend coffee × 1 — $20.00",
+                "w": 472,
+                "h": 32,
+                "cites": "color.text"
+              }
+            ]
+          },
+          {
+            "id": "shipping",
+            "role": "body",
+            "text": "Standard shipping · Free",
+            "x": 40,
+            "y": 484,
+            "w": 350,
+            "h": 28,
+            "cites": "color.text"
+          },
+          {
+            "id": "total",
+            "role": "heading",
+            "text": "Total: $68.00",
+            "x": 40,
+            "y": 528,
+            "w": 520,
+            "h": 44,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "address",
+            "role": "body",
+            "text": "Delivering to Maya Ortiz · 1 Example Street, Example City",
+            "x": 40,
+            "y": 594,
+            "w": 520,
+            "h": 48,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "tracking-link",
+            "role": "button",
+            "text": "Track your order →",
+            "x": 40,
+            "y": 668,
+            "w": 520,
+            "h": 52,
+            "cites": "color.accent",
+            "goto": "tracking",
+            "tone": "accent"
+          },
+          {
+            "id": "help",
+            "role": "body",
+            "text": "Questions? Reply to this email and we’ll help.",
+            "x": 40,
+            "y": 754,
+            "w": 520,
+            "h": 28,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "tracking",
+        "name": "Shipping update",
+        "w": 600,
+        "h": 860,
+        "elements": [
+          {
+            "id": "brand",
+            "role": "logo",
+            "text": "Example Co Goods",
+            "x": 40,
+            "y": 36,
+            "w": 520,
+            "h": 32,
+            "cites": "color.accent"
+          },
+          {
+            "id": "shipping-status",
+            "role": "badge",
+            "text": "ON ITS WAY",
+            "x": 40,
+            "y": 100,
+            "w": 132,
+            "h": 28,
+            "cites": "color.accent"
+          },
+          {
+            "id": "shipping-title",
+            "role": "heading",
+            "text": "Your next coffee break is close.",
+            "x": 40,
+            "y": 148,
+            "w": 520,
+            "h": 76,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "shipping-subtitle",
+            "role": "body",
+            "text": "Order NW-4821 · Standard delivery",
+            "x": 40,
+            "y": 230,
+            "w": 520,
+            "h": 28,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "shipment",
+            "role": "card",
+            "x": 40,
+            "y": 294,
+            "w": 520,
+            "h": 276,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 10,
+            "pad": 22,
+            "children": [
+              {
+                "id": "eta-label",
+                "role": "field-label",
+                "text": "ESTIMATED DELIVERY",
+                "w": 472,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "eta",
+                "role": "heading",
+                "text": "Within 2–3 business days",
+                "w": 472,
+                "h": 76,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "step-one",
+                "role": "body",
+                "text": "✓ Order confirmed",
+                "w": 472,
+                "h": 28,
+                "cites": "color.text"
+              },
+              {
+                "id": "step-two",
+                "role": "body",
+                "text": "✓ Packed and handed to the carrier",
+                "w": 472,
+                "h": 28,
+                "cites": "color.text"
+              },
+              {
+                "id": "step-three",
+                "role": "body",
+                "text": "Next: arriving at your door",
+                "w": 472,
+                "h": 28,
+                "cites": "color.text",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "shipment-address",
+            "role": "body",
+            "text": "Maya Ortiz · 1 Example Street, Example City",
+            "x": 40,
+            "y": 588,
+            "w": 520,
+            "h": 48,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "receipt-link",
+            "role": "button",
+            "text": "View order details",
+            "x": 40,
+            "y": 666,
+            "w": 520,
+            "h": 52,
+            "cites": "color.accent",
+            "goto": "receipt",
+            "tone": "accent"
+          },
+          {
+            "id": "shipping-help",
+            "role": "body",
+            "text": "Need to change something? Reply to your receipt.",
+            "x": 40,
+            "y": 754,
+            "w": 520,
+            "h": 28,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      }
+    ]
+  }
+}

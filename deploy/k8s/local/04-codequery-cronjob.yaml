@@ -1,0 +1,31 @@
+# A CronJob, not a new scheduler dependency: one pull-
+# and-index pass, then exit. Force a run now rather than waiting an hour:
+#   kubectl create job -n commonindex-local --from=cronjob/codequery codequery-manual
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: codequery
+  namespace: commonindex-local
+spec:
+  schedule: "0 * * * *"
+  concurrencyPolicy: Forbid  # one pass at a time per repo's cursor
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: codequery
+              image: commonindex:local
+              imagePullPolicy: Never
+              command: ["python", "-m", "commonindex.workers.codequery"]
+              env:
+                - name: COMMONINDEX_DSN
+                  valueFrom: {secretKeyRef: {name: commonindex-secrets, key: COMMONINDEX_DSN}}
+                - name: GITHUB_TOKEN
+                  valueFrom: {secretKeyRef: {name: commonindex-secrets, key: GITHUB_TOKEN}}
+                - name: CODEQUERY_REPOS
+                  valueFrom: {configMapKeyRef: {name: commonindex-config, key: CODEQUERY_REPOS}}

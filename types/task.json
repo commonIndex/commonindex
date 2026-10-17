@@ -1,0 +1,66 @@
+{
+  "id": "task",
+  "label": "Task",
+  "plural": "Tasks",
+  "schema": {
+    "type": "object",
+    "required": ["title"],
+    "properties": {
+      "title":      { "type": "string", "minLength": 1, "maxLength": 200 },
+      "detail":     { "type": ["string", "null"],
+                      "description": "What the title cannot carry: the context a person or an agent needs to start." },
+      "state":      { "enum": ["ready", "flight", "review", "done"], "readOnly": true,
+                      "description": "A new task starts ready. It moves only through tasks.start, tasks.hand, tasks.release, tasks.submit, tasks.accept and tasks.send_back — never by writing this field." },
+      "assignee":   { "type": ["string", "null"], "readOnly": true,
+                      "description": "The actor working it. Set by tasks.start or tasks.hand." },
+      "origin":     { "enum": ["filed", "triggered"],
+                      "description": "filed: a person wrote it down. triggered: an agent filed it off an event." },
+      "human_only": { "type": ["string", "null"],
+                      "description": "Why this needs a person. Set, no agent may take it." },
+      "criteria":   {
+        "type": "array",
+        "title": "Definition of done",
+        "description": "The definition of done. Empty means no agent can take this task — not as a policy, but because there would be nothing for it to verify against before filing.",
+        "items": {
+          "type": "object",
+          "required": ["text"],
+          "properties": {
+            "text": { "type": "string", "minLength": 1 },
+            "met":  { "type": ["boolean", "null"] }
+          }
+        }
+      },
+      "moved_at":   { "type": "string", "format": "date-time", "readOnly": true,
+                      "description": "When it entered its current state — how long a review has waited is read from this." },
+      "question":   { "type": ["object", "null"], "readOnly": true, "title": "Question for a person",
+                      "description": "What the one working it stopped to ask a person. Set by tasks.question, cleared by tasks.answer.",
+                      "properties": { "text": { "type": "string" }, "by": { "type": "string" }, "at": { "type": "string" } } },
+      "produced":   { "type": ["object", "null"], "readOnly": true, "title": "What it produced",
+                      "description": "What the work produced, named when it was filed for review.",
+                      "properties": { "label": { "type": "string" }, "object_id": { "type": ["string", "null"] },
+                                      "url": { "type": ["string", "null"] } } },
+      "review":     { "type": ["object", "null"], "readOnly": true, "title": "Review",
+                      "description": "Who filed it for review and what the reviewer decided." },
+      "ask_seq":    { "type": ["integer", "null"], "readOnly": true,
+                      "description": "The `asked` event an agent assignee is answering; its run is the run with this trigger_seq." }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "title",
+    "subtitle": ["origin"],
+    "preview": "human_only",
+    "status": "state"
+  },
+  "facets": [
+    { "kind": "enum",  "field": "state",  "values": ["ready", "flight", "review", "done"] },
+    { "kind": "enum",  "field": "origin", "values": ["filed", "triggered"] },
+    { "kind": "actor", "field": "assignee" }
+  ],
+  "measures": [],
+  "prose": ["title", "detail", "criteria.text", "question.text", "review.note", "review.decision_note",
+            "produced.label"],
+  "relations": ["task.caused.*", "task.touches.*", "task.depends.*"],
+  "version": 2,
+  "status": "ratified"
+}

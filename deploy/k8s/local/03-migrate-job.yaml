@@ -1,0 +1,22 @@
+# One-shot: applies migrations/*.sql (scripts/migrate.py), then exits.
+# `kubectl apply` on a Job whose name already exists is a no-op-on-conflict
+# for a completed Job; delete it before re-running after a schema change:
+#   kubectl delete job -n commonindex-local migrate --ignore-not-found
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+  namespace: commonindex-local
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: commonindex:local
+          imagePullPolicy: Never  # loaded directly into the local cluster; never pulled
+          command: ["python", "scripts/migrate.py"]
+          env:
+            - name: COMMONINDEX_DSN
+              valueFrom: {secretKeyRef: {name: commonindex-secrets, key: COMMONINDEX_DSN}}

@@ -1,0 +1,164 @@
+{
+  "title": "System · Ink",
+  "surface": "email",
+  "state": "approved",
+  "cites": [],
+  "spec": {
+    "tokens": {
+      "color.bg": {
+        "$value": "#101316",
+        "$type": "color"
+      },
+      "color.surface": {
+        "$value": "#1a1f24",
+        "$type": "color"
+      },
+      "color.text": {
+        "$value": "#f2f5f8",
+        "$type": "color"
+      },
+      "color.muted": {
+        "$value": "#94a1ad",
+        "$type": "color"
+      },
+      "color.accent": {
+        "$value": "#4d9bff",
+        "$type": "color"
+      },
+      "color.onAccent": {
+        "$value": "#0b0e11",
+        "$type": "color"
+      },
+      "color.border": {
+        "$value": "#2a3239",
+        "$type": "color"
+      },
+      "radius.md": {
+        "$value": 4,
+        "$type": "dimension"
+      },
+      "font.size.heading": {
+        "$value": 25,
+        "$type": "dimension"
+      },
+      "font.size.body": {
+        "$value": 13,
+        "$type": "dimension"
+      }
+    },
+    "screens": [
+      {
+        "id": "specimen",
+        "name": "Ink",
+        "w": 600,
+        "h": 420,
+        "elements": [
+          {
+            "id": "h",
+            "role": "heading",
+            "x": 40,
+            "y": 44,
+            "w": 520,
+            "h": 40,
+            "text": "Ink",
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "s",
+            "role": "body",
+            "x": 40,
+            "y": 92,
+            "w": 520,
+            "h": 20,
+            "text": "High contrast, sharp corners. For tools used all day.",
+            "cites": "color.muted"
+          },
+          {
+            "id": "d1",
+            "role": "divider",
+            "x": 40,
+            "y": 128,
+            "w": 520,
+            "h": 1,
+            "cites": "color.border"
+          },
+          {
+            "id": "l",
+            "role": "field-label",
+            "x": 40,
+            "y": 152,
+            "w": 200,
+            "h": 14,
+            "text": "INPUT",
+            "cites": "color.muted"
+          },
+          {
+            "id": "i",
+            "role": "input",
+            "x": 40,
+            "y": 172,
+            "w": 300,
+            "h": 46,
+            "text": "you@example.com",
+            "cites": "color.border"
+          },
+          {
+            "id": "b1",
+            "role": "button",
+            "x": 356,
+            "y": 172,
+            "w": 100,
+            "h": 46,
+            "text": "Primary",
+            "cites": "color.accent",
+            "tone": "accent"
+          },
+          {
+            "id": "b2",
+            "role": "button",
+            "x": 464,
+            "y": 172,
+            "w": 96,
+            "h": 46,
+            "text": "Quiet",
+            "cites": "color.surface",
+            "tone": "muted"
+          },
+          {
+            "id": "bd",
+            "role": "badge",
+            "x": 40,
+            "y": 240,
+            "w": 90,
+            "h": 24,
+            "text": "Badge",
+            "cites": "color.accent",
+            "tone": "accent"
+          },
+          {
+            "id": "c",
+            "role": "card",
+            "x": 40,
+            "y": 284,
+            "w": 250,
+            "h": 96,
+            "text": "Surface",
+            "cites": "radius.md"
+          },
+          {
+            "id": "c2",
+            "role": "card",
+            "x": 310,
+            "y": 284,
+            "w": 250,
+            "h": 96,
+            "text": "Border & radius",
+            "cites": "radius.md"
+          }
+        ]
+      }
+    ]
+  },
+  "template_kind": "system",
+  "description": "High contrast, sharp corners. For tools used all day."
+}

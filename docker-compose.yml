@@ -1,0 +1,65 @@
+# Postgres with pgvector, for integration tests and local development.
+#
+# The version and the extension are pinned: pgvector's index types have changed
+# behaviour between minor releases, and a test suite that passes on whatever the
+# developer happens to have installed is not evidence of anything.
+
+# Pinned, because Compose otherwise names the project after the checkout
+# directory — so a clone into `commonindex/` or `code-query/` gets different volume
+# names, and `make code-index` writes shards the running service cannot see.
+name: commonindex
+
+# Published ports bind to loopback unless BIND_ADDR says otherwise. On a laptop
+# that changes nothing. On a cloud host it is the difference between a private
+# database and one anybody can reach: neither service authenticates a caller the
+# way the gateway does, and Zoekt in particular will serve the full text of
+# every indexed repository to whoever asks. Widen deliberately, per environment,
+# never as the default that ships:  BIND_ADDR=0.0.0.0 docker compose up -d
+
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: commonindex_test
+      POSTGRES_USER: commonindex
+      POSTGRES_PASSWORD: commonindex
+    ports: ["${BIND_ADDR:-127.0.0.1}:5433:5432"]   # 5433 leaves a local Postgres alone
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U commonindex -d commonindex_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+    tmpfs:
+      # The test database is disposable by design — every run applies migrations
+      # from scratch, so durability would only slow it down.
+      - /var/lib/postgresql/data
+
+  # Trigram code search. A candidate generator only: it is queried with a repo
+  # filter built from the caller's grants, and every hit is re-authorized
+  # against Postgres before any body is returned. It is never exposed outside
+  # the gateway, which is why no port needs publishing in a deployed setup —
+  # 6070 is here so a developer can probe it directly.
+  #
+  # linux/amd64 is the only architecture Zoekt publishes, so this runs emulated
+  # on Apple silicon. Fine for indexing a handful of repos, which happens on a
+  # background pass rather than in the query path; build from source if a large
+  # corpus makes the emulation cost real.
+  zoekt:
+    image: sourcegraph/zoekt-webserver:latest
+    platform: linux/amd64
+    ports: ["${BIND_ADDR:-127.0.0.1}:6070:6070"]
+    volumes:
+      # DATA_DIR is /data/index in this image, NOT /data. Mounting one level up
+      # starts a healthy server that serves an empty corpus, which looks exactly
+      # like "your code does not mention that".
+      - zoekt-index:/data/index
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://localhost:6070/ >/dev/null || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  # Shards outlive the container: rebuilding them means re-reading every
+  # repository, which is minutes of work to recover data that had not changed.
+  zoekt-index:

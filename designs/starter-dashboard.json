@@ -1,0 +1,572 @@
+{
+  "title": "Starter · SaaS dashboard",
+  "description": "A business overview and activation report with editable KPI cards, customer rows, and drill-down links.",
+  "template_kind": "layout",
+  "surface": "web",
+  "state": "approved",
+  "cites": [],
+  "spec": {
+    "tokens": {
+      "color.bg": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "color.surface": {
+        "$type": "color",
+        "$value": "#f3f6fa"
+      },
+      "color.text": {
+        "$type": "color",
+        "$value": "#172033"
+      },
+      "color.muted": {
+        "$type": "color",
+        "$value": "#64748b"
+      },
+      "color.accent": {
+        "$type": "color",
+        "$value": "#5b3fd1"
+      },
+      "color.onAccent": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "color.border": {
+        "$type": "color",
+        "$value": "#dde5ee"
+      },
+      "color.danger": {
+        "$type": "color",
+        "$value": "#c2413a"
+      },
+      "radius.md": {
+        "$type": "dimension",
+        "$value": 14
+      },
+      "font.size.body": {
+        "$type": "dimension",
+        "$value": 15
+      },
+      "font.size.heading": {
+        "$type": "dimension",
+        "$value": 30
+      }
+    },
+    "screens": [
+      {
+        "id": "overview",
+        "name": "Business overview",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "dashboard-nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "pad": 20,
+            "gap": 24,
+            "align": "center",
+            "children": [
+              {
+                "id": "dashboard-brand",
+                "role": "logo",
+                "text": "Example Co Analytics",
+                "w": 600,
+                "h": 36,
+                "cites": "color.accent",
+                "goto": "overview"
+              },
+              {
+                "id": "nav-overview",
+                "role": "button",
+                "text": "Overview",
+                "w": 180,
+                "h": 40,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "overview"
+              },
+              {
+                "id": "nav-report",
+                "role": "button",
+                "text": "Activation report",
+                "w": 220,
+                "h": 40,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "report"
+              }
+            ]
+          },
+          {
+            "id": "dashboard-heading",
+            "role": "heading",
+            "text": "Your business, at a glance.",
+            "x": 64,
+            "y": 126,
+            "w": 900,
+            "h": 48,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "dashboard-period",
+            "role": "body",
+            "text": "Sample data · Last 30 days · All workspaces",
+            "x": 64,
+            "y": 190,
+            "w": 900,
+            "h": 28,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "revenue",
+            "role": "card",
+            "x": 64,
+            "y": 256,
+            "w": 368,
+            "h": 164,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 10,
+            "pad": 24,
+            "children": [
+              {
+                "id": "revenue-label",
+                "role": "field-label",
+                "text": "REVENUE",
+                "w": 318,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "revenue-value",
+                "role": "heading",
+                "text": "$84,240",
+                "w": 318,
+                "h": 42,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "revenue-change",
+                "role": "body",
+                "text": "+12.8% vs. previous period",
+                "w": 318,
+                "h": 28,
+                "cites": "color.text",
+                "tone": "accent"
+              }
+            ]
+          },
+          {
+            "id": "customers",
+            "role": "card",
+            "x": 456,
+            "y": 256,
+            "w": 368,
+            "h": 164,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 10,
+            "pad": 24,
+            "children": [
+              {
+                "id": "customers-label",
+                "role": "field-label",
+                "text": "ACTIVE CUSTOMERS",
+                "w": 318,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "customers-value",
+                "role": "heading",
+                "text": "1,284",
+                "w": 318,
+                "h": 42,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "customers-change",
+                "role": "body",
+                "text": "+86 customers this month",
+                "w": 318,
+                "h": 28,
+                "cites": "color.text",
+                "tone": "accent"
+              }
+            ]
+          },
+          {
+            "id": "activation",
+            "role": "card",
+            "x": 848,
+            "y": 256,
+            "w": 368,
+            "h": 164,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 10,
+            "pad": 24,
+            "children": [
+              {
+                "id": "activation-label",
+                "role": "field-label",
+                "text": "ACTIVATION RATE",
+                "w": 318,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "activation-value",
+                "role": "heading",
+                "text": "63.2%",
+                "w": 318,
+                "h": 42,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "activation-change",
+                "role": "body",
+                "text": "+4.1 percentage points",
+                "w": 318,
+                "h": 28,
+                "cites": "color.text",
+                "tone": "accent"
+              }
+            ]
+          },
+          {
+            "id": "customers-list",
+            "role": "card",
+            "x": 64,
+            "y": 462,
+            "w": 744,
+            "h": 324,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 10,
+            "pad": 24,
+            "children": [
+              {
+                "id": "customers-title",
+                "role": "heading",
+                "text": "Recent customers",
+                "w": 694,
+                "h": 44,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "customer-head",
+                "role": "field-label",
+                "text": "COMPANY / PLAN / STATUS",
+                "w": 694,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "customer-one",
+                "role": "body",
+                "text": "Example Co Studio · Team · Active",
+                "w": 694,
+                "h": 40,
+                "cites": "color.text"
+              },
+              {
+                "id": "customer-two",
+                "role": "body",
+                "text": "Example Labs · Business · Trial",
+                "w": 694,
+                "h": 40,
+                "cites": "color.text"
+              },
+              {
+                "id": "customer-three",
+                "role": "body",
+                "text": "Example Design · Team · Active",
+                "w": 694,
+                "h": 40,
+                "cites": "color.text"
+              },
+              {
+                "id": "customer-four",
+                "role": "body",
+                "text": "Example Research · Business · Active",
+                "w": 694,
+                "h": 40,
+                "cites": "color.text"
+              }
+            ]
+          },
+          {
+            "id": "activation-insight",
+            "role": "card",
+            "x": 848,
+            "y": 462,
+            "w": 368,
+            "h": 324,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 14,
+            "pad": 24,
+            "children": [
+              {
+                "id": "insight-label",
+                "role": "field-label",
+                "text": "WORTH A CLOSER LOOK",
+                "w": 318,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "insight-title",
+                "role": "heading",
+                "text": "Activation is up.",
+                "w": 318,
+                "h": 44,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "insight-copy",
+                "role": "body",
+                "text": "More new workspaces are reaching their first shared project. Review the sample cohort breakdown.",
+                "w": 318,
+                "h": 96,
+                "cites": "color.text",
+                "tone": "muted"
+              },
+              {
+                "id": "insight-link",
+                "role": "button",
+                "text": "Open activation report →",
+                "w": 318,
+                "h": 48,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "report"
+              }
+            ]
+          },
+          {
+            "id": "demo-label",
+            "role": "body",
+            "text": "Demo figures for layout exploration — connect real metrics in your implementation.",
+            "x": 64,
+            "y": 822,
+            "w": 1152,
+            "h": 28,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "name": "Activation report",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "dashboard-nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "pad": 20,
+            "gap": 24,
+            "align": "center",
+            "children": [
+              {
+                "id": "dashboard-brand",
+                "role": "logo",
+                "text": "Example Co Analytics",
+                "w": 600,
+                "h": 36,
+                "cites": "color.accent",
+                "goto": "overview"
+              },
+              {
+                "id": "nav-overview",
+                "role": "button",
+                "text": "Overview",
+                "w": 180,
+                "h": 40,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "overview"
+              },
+              {
+                "id": "nav-report",
+                "role": "button",
+                "text": "Activation report",
+                "w": 220,
+                "h": 40,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "report"
+              }
+            ]
+          },
+          {
+            "id": "report-title",
+            "role": "heading",
+            "text": "From signup to first shared project.",
+            "x": 64,
+            "y": 126,
+            "w": 1152,
+            "h": 54,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "report-context",
+            "role": "body",
+            "text": "Sample report · Activation means creating a project and inviting a teammate.",
+            "x": 64,
+            "y": 198,
+            "w": 1152,
+            "h": 32,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "report-summary",
+            "role": "card",
+            "x": 64,
+            "y": 274,
+            "w": 368,
+            "h": 402,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 18,
+            "pad": 24,
+            "children": [
+              {
+                "id": "report-label",
+                "role": "field-label",
+                "text": "THIS PERIOD",
+                "w": 318,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "report-value",
+                "role": "heading",
+                "text": "63.2%",
+                "w": 318,
+                "h": 64,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "report-explainer",
+                "role": "body",
+                "text": "158 of 250 new workspaces completed the activation steps.",
+                "w": 318,
+                "h": 84,
+                "cites": "color.text"
+              },
+              {
+                "id": "report-change",
+                "role": "badge",
+                "text": "+4.1 PTS",
+                "w": 136,
+                "h": 28,
+                "cites": "color.accent"
+              },
+              {
+                "id": "report-note",
+                "role": "body",
+                "text": "Illustrative numbers, not a live query.",
+                "w": 318,
+                "h": 56,
+                "cites": "color.text",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "cohorts",
+            "role": "card",
+            "x": 472,
+            "y": 274,
+            "w": 744,
+            "h": 402,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 14,
+            "pad": 24,
+            "children": [
+              {
+                "id": "cohort-title",
+                "role": "heading",
+                "text": "Weekly cohorts",
+                "w": 694,
+                "h": 46,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "cohort-heading",
+                "role": "field-label",
+                "text": "COHORT / NEW WORKSPACES / ACTIVATED",
+                "w": 694,
+                "h": 20,
+                "cites": "color.text"
+              },
+              {
+                "id": "cohort-one",
+                "role": "body",
+                "text": "Week 1 — 60 workspaces — 35 activated",
+                "w": 694,
+                "h": 48,
+                "cites": "color.text"
+              },
+              {
+                "id": "cohort-two",
+                "role": "body",
+                "text": "Week 2 — 65 workspaces — 40 activated",
+                "w": 694,
+                "h": 48,
+                "cites": "color.text"
+              },
+              {
+                "id": "cohort-three",
+                "role": "body",
+                "text": "Week 3 — 58 workspaces — 38 activated",
+                "w": 694,
+                "h": 48,
+                "cites": "color.text"
+              },
+              {
+                "id": "cohort-four",
+                "role": "body",
+                "text": "Week 4 — 67 workspaces — 45 activated",
+                "w": 694,
+                "h": 48,
+                "cites": "color.text"
+              }
+            ]
+          },
+          {
+            "id": "report-back",
+            "role": "button",
+            "text": "← Back to overview",
+            "x": 64,
+            "y": 728,
+            "w": 260,
+            "h": 52,
+            "cites": "color.accent",
+            "goto": "overview",
+            "tone": "muted"
+          }
+        ]
+      }
+    ]
+  }
+}

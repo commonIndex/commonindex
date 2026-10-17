@@ -1,0 +1,70 @@
+{
+  "id": "doc",
+  "label": "Doc",
+  "plural": "Docs",
+  "schema": {
+    "type": "object",
+    "required": ["title", "body"],
+    "properties": {
+      "title": { "type": "string" },
+      "space": { "type": "string" },
+      "freshness": { "enum": ["fresh", "stale", "verified"] },
+      "excerpt": {
+        "type": "string",
+        "description": "The first words of the body as plain text, for a list row. Derived by the gateway on every revise rather than sent by the caller, so it cannot say something the body does not."
+      },
+      "body": {
+        "$ref": "#/$defs/node",
+        "description": "The document as a block tree, never markup. Every block is one of the node types below and every run of text carries only the marks below, so there is no field an editor, an agent or a model could put HTML in. It is the same argument a design makes for roles over markup: a tree can be diffed and reviewed as a proposal, and it renders without a sandbox. HTML that runs is an artifact, its own item, and the doc embeds it by id: {\"type\": \"embed\", \"attrs\": {\"ref\": \"<artifact id>\"}}."
+      }
+    },
+    "$defs": {
+      "node": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "enum": [
+              "doc", "paragraph", "text", "heading", "blockquote", "horizontalRule", "hardBreak",
+              "bulletList", "orderedList", "listItem", "taskList", "taskItem", "codeBlock",
+              "table", "tableRow", "tableHeader", "tableCell", "image",
+              "details", "detailsSummary", "detailsContent",
+              "embed"
+            ]
+          },
+          "text": { "type": "string" },
+          "attrs": { "type": "object" },
+          "content": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+          "marks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": { "enum": ["bold", "italic", "underline", "strike", "code", "link"] },
+                "attrs": { "type": "object" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "title",
+    "subtitle": ["space"],
+    "preview": "excerpt",
+    "status": "freshness"
+  },
+  "facets": [
+    { "kind": "enum", "field": "freshness", "values": ["fresh", "stale", "verified"] },
+    { "kind": "enum", "field": "space" }
+  ],
+  "measures": [],
+  "prose": ["title", "body"],
+  "relations": ["doc.cites.doc"],
+  "version": 1,
+  "status": "ratified",
+  "_note": "Graph-backed, like a design: a doc is an instance that is written and revised, and every revise keeps a full snapshot in `revisions`. Not a CRDT yet — two people editing one doc get a stale-revision refusal rather than a merge, which is honest about what this is until the sync service exists."
+}

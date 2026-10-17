@@ -1,0 +1,59 @@
+# pgvector/pgvector:pg17 — the same image docker-compose.yml uses, so local
+# k8s and local compose stay interchangeable for dev. Persistent (PVC), unlike
+# compose's tmpfs: the whole point of a cron job is data surviving between runs.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-data
+  namespace: commonindex-local
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: commonindex-local
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate  # a single ReadWriteOnce volume cannot be double-mounted
+  selector:
+    matchLabels: {app: postgres}
+  template:
+    metadata:
+      labels: {app: postgres}
+    spec:
+      containers:
+        - name: postgres
+          image: pgvector/pgvector:pg17
+          ports: [{containerPort: 5432}]
+          env:
+            - name: POSTGRES_DB
+              valueFrom: {configMapKeyRef: {name: commonindex-config, key: POSTGRES_DB}}
+            - name: POSTGRES_USER
+              valueFrom: {configMapKeyRef: {name: commonindex-config, key: POSTGRES_USER}}
+            - name: POSTGRES_PASSWORD
+              valueFrom: {secretKeyRef: {name: commonindex-secrets, key: POSTGRES_PASSWORD}}
+          volumeMounts:
+            - {name: data, mountPath: /var/lib/postgresql/data}
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "commonindex"]
+            initialDelaySeconds: 5
+            periodSeconds: 3
+      volumes:
+        - name: data
+          persistentVolumeClaim: {claimName: postgres-data}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: commonindex-local
+spec:
+  selector: {app: postgres}
+  ports: [{port: 5432, targetPort: 5432}]

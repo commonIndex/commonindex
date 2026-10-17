@@ -1,0 +1,64 @@
+{
+  "id": "artifact",
+  "label": "Artifact",
+  "plural": "Artifacts",
+  "schema": {
+    "type": "object",
+    "required": [
+      "title"
+    ],
+    "properties": {
+      "title": {
+        "type": "string"
+      },
+      "space": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string",
+        "description": "What the artifact is for, in a sentence."
+      },
+      "html": {
+        "type": "string",
+        "description": "The artifact as one self-contained HTML fragment: inline <style> and <script>, inline SVG, data: images. No external URLs, scripts, iframes, forms or network calls — it is refused otherwise. It runs in a sandboxed frame with no network and no access to the app."
+      },
+      "height": {
+        "type": "integer",
+        "minimum": 120,
+        "maximum": 1600,
+        "description": "How tall it shows, in CSS pixels, where a doc embeds it. 420 when not set."
+      },
+      "snapshot": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "description": "A still of the artifact for pages that run no script — a shared doc, an export. Written by the gateway: status, at, bytes, error."
+      },
+      "sources": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Object ids the artifact was made from — a doc, dashboard, metric."
+      }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "title",
+    "subtitle": [
+      "space"
+    ],
+    "preview": "description"
+  },
+  "facets": [
+    {
+      "kind": "enum",
+      "field": "space"
+    }
+  ],
+  "measures": [],
+  "version": 1,
+  "status": "ratified"
+}

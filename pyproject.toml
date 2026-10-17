@@ -1,0 +1,80 @@
+[project]
+name = "commonindex"
+version = "0.1.0"
+description = "Where agents work alongside your team"
+requires-python = ">=3.12"
+license = { file = "LICENSE.md" }   # PolyForm-Internal-Use-1.0.0 OR PolyForm-Noncommercial-1.0.0; ee/ folders: ee/LICENSE.md
+dependencies = [
+    "fastapi>=0.115",
+    "pydantic>=2.9",
+    "asyncpg>=0.30",
+    "sqlalchemy>=2.0",      # the warehouse layer — 50 engines' connection handling
+    "sqlglot>=25",          # dialect emission, replacing hand-written engine specs
+    "mcp>=2.2",             # the official Python SDK
+    "pyyaml>=6.0.3",
+    "jsonschema>=4.23",   # a type's schema is a constraint, so something has to check it
+    "pyjwt[crypto]>=2.15",  # verifying a single sign-on's ID token (MIT)
+    "tree-sitter>=0.26.0",
+    "tree-sitter-language-pack>=1.20.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.7",
+    "greenlet>=3",          # SQLAlchemy's async bridge
+    "duckdb-engine>=0.13",  # a sync dialect, like BigQuery and Snowflake
+    "aiosqlite>=0.20",      # an async one, like Postgres
+    "jsonschema>=4.26.0",
+]
+
+# Warehouse dialects are optional on purpose: each is a vendor-maintained
+# package, and a deployment that never connects to Snowflake should not carry
+# its driver. Installing one is all it takes — the EngineSpec is already there.
+[project.scripts]
+# The MCP transport, launched by an agent as its own process. It runs the
+# gateway's lifespan itself — it is not a client of a server somebody else
+# started — so it needs COMMONINDEX_DSN and COMMONINDEX_SECRET_KEY in its environment.
+commonindex-mcp = "commonindex.gateway.mcp_server:main"
+# The same operations from a terminal, over HTTP with your token: `commonindex ops`,
+# `commonindex help <op>`, `commonindex <op> name=value ...`.
+commonindex = "commonindex.cli:main"
+
+[project.optional-dependencies]
+bigquery = ["sqlalchemy-bigquery>=1.11"]
+snowflake = ["snowflake-sqlalchemy>=1.6"]
+duckdb = ["duckdb-engine>=0.13"]
+sqlite = ["aiosqlite>=0.20"]
+# The model adapter. Optional because the platform holds no key of its own
+# and works entirely without one — templates, filing and review need no model.
+model = ["anthropic>=0.69"]
+# Media in an S3-compatible bucket (AWS S3, Google Cloud Storage, R2, MinIO…)
+# instead of a local folder: COMMONINDEX_MEDIA_STORE=s3. See docs/deploy.md.
+s3 = ["boto3>=1.34"]
+
+# P1 · substrate open, governance paid.
+#
+# Two top-level packages, and the direction of dependency is asserted by
+# tests/test_core_isolation.py: commonindex_enterprise may import commonindex, never the
+# reverse. Splitting into two published distributions is a packaging step at
+# release time, not a source-layout question.
+#
+# The Go skeleton put everything under internal/, which the review correctly
+# flagged: Go makes internal/ unimportable outside the module, so the open half
+# agent builders were promised could not be imported by anyone at all.
+[tool.setuptools]
+packages = ["commonindex", "commonindex_enterprise"]
+
+# commonindex.adapters holds vendor-specific implementations of core protocols. It is
+# part of the open substrate; the split from core is architectural, not
+# commercial.
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = ["integration: needs a live Postgres; skipped when none is reachable"]

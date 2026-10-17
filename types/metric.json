@@ -1,0 +1,100 @@
+{
+  "id": "metric",
+  "label": "Metric",
+  "plural": "Metrics",
+  "schema": {
+    "type": "object",
+    "required": [
+      "label",
+      "expr",
+      "status"
+    ],
+    "properties": {
+      "label": {
+        "type": "string"
+      },
+      "expr": {
+        "type": "string",
+        "description": "The aggregate, in the source's own terms. Authored and ratified as a whole, never assembled."
+      },
+      "unit": {
+        "enum": [
+          "pct",
+          "currency",
+          "count",
+          "duration"
+        ]
+      },
+      "better": {
+        "enum": [
+          "up",
+          "down"
+        ],
+        "description": "Which direction is good, so a verdict is computed rather than typed in by whoever built the panel."
+      },
+      "status": {
+        "enum": [
+          "proposed",
+          "ratified",
+          "deprecated"
+        ]
+      },
+      "dataset": {
+        "type": "string"
+      },
+      "version": {
+        "type": "integer"
+      }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "label",
+    "subtitle": [
+      "dataset",
+      "unit"
+    ],
+    "preview": "expr",
+    "status": "status"
+  },
+  "facets": [
+    {
+      "field": "status",
+      "kind": "enum",
+      "values": [
+        "proposed",
+        "ratified",
+        "deprecated"
+      ],
+      "attention": [
+        "proposed"
+      ]
+    },
+    {
+      "field": "unit",
+      "kind": "enum",
+      "values": [
+        "pct",
+        "currency",
+        "count",
+        "duration"
+      ]
+    },
+    {
+      "field": "dataset",
+      "kind": "enum"
+    }
+  ],
+  "measures": [],
+  "prose": [
+    "label"
+  ],
+  "relations": [
+    "metric.defined_on.dataset",
+    "metric.supersedes.metric"
+  ],
+  "version": 1,
+  "status": "ratified",
+  "_note": "The expression is the preview line, deliberately: when you are choosing between two metrics that sound alike, the definition is the thing that tells them apart.",
+  "store": "registry"
+}

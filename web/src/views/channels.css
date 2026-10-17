@@ -1,0 +1,36 @@
+/* A channel's settings and its privacy: the header actions, the badges in
+   the list, the private option when creating one, and the archived notice. */
+
+.channel-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+.channel-archived {
+  margin: 12px 0 0; padding: 8px 12px; border-radius: 8px; font-size: 13px;
+  background: var(--panel2); color: var(--text2); border: 1px solid var(--border);
+}
+.thread-closed {
+  margin: 0; padding: 12px 14px; border-radius: 10px; font-size: 13px; text-align: center;
+  background: var(--panel2); color: var(--text2); border: 1px dashed var(--border2);
+}
+.chl-badge {
+  display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 999px; vertical-align: 1px;
+  font-size: 11px; font-weight: 600; color: var(--text2); background: var(--panel2); border: 1px solid var(--border);
+}
+.chl-private { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--text2); cursor: pointer; }
+.chl-private input { margin-top: 2px; }
+.chl-private b { color: var(--text); }
+.chl-show-archived { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text2); white-space: nowrap; }
+.channel-danger {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px;
+  border: 1px solid var(--border); border-radius: 10px;
+}
+.channel-danger div { display: grid; gap: 2px; font-size: 13px; }
+.channel-danger span { color: var(--text2); font-size: 12.5px; }
+.chl-name-field {
+  display: flex; align-items: center; gap: 2px; padding: 0 12px; border: 1px solid var(--border2); border-radius: 10px;
+  background: var(--panel); font-weight: 400;
+}
+.chl-name-field:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+.chl-name-field > span { color: var(--muted); font-size: 14px; }
+.chl-name-field input, .chl-name-field input:focus {
+  border: 0 !important; box-shadow: none !important; outline: none; background: transparent !important;
+  padding-left: 2px !important; flex: 1; min-width: 0;
+}

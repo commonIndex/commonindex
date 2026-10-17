@@ -1,0 +1,35 @@
+{
+  "id": "deploy",
+  "label": "Release",
+  "plural": "Releases",
+  "schema": {
+    "type": "object",
+    "required": ["service", "version", "env", "state"],
+    "properties": {
+      "service": { "type": "string" },
+      "version": { "type": "string" },
+      "sha":     { "type": "string" },
+      "env":     { "enum": ["dev", "staging", "production"] },
+      "tool":    { "type": "string" },
+      "state":   { "enum": ["queued", "running", "awaiting-approval", "live", "rolled-back", "failed"] }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "service",
+    "subtitle": ["version", "env"],
+    "preview": "sha",
+    "status": "state"
+  },
+  "facets": [
+    { "kind": "enum", "field": "env" },
+    { "kind": "enum", "field": "state", "attention": ["awaiting-approval", "rolled-back", "failed"] },
+    { "kind": "enum", "field": "service" }
+  ],
+  "measures": [],
+  "prose": [],
+  "relations": ["deploy.ships.pr", "deploy.caused.incident"],
+  "version": 1,
+  "status": "ratified",
+  "_note": "prose is deliberately empty. A release has almost no natural language on it — you query it by service, env, state and sha. Embedding 'payments-api 2.4.1 live production' costs money and adds noise to recall."
+}

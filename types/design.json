@@ -1,0 +1,469 @@
+{
+  "id": "design",
+  "label": "Design",
+  "plural": "Designs",
+  "schema": {
+    "type": "object",
+    "required": [
+      "title",
+      "surface",
+      "spec"
+    ],
+    "properties": {
+      "title": {
+        "type": "string"
+      },
+      "template_kind": {
+        "enum": ["layout", "system"],
+        "description": "Optional catalogue role: a reusable screen layout or a design-token system. Ordinary designs need neither."
+      },
+      "description": {
+        "type": "string",
+        "description": "A short description of what this design or template is for."
+      },
+      "space": {
+        "type": "string"
+      },
+      "surface": {
+        "enum": [
+          "mobile",
+          "web",
+          "email"
+        ]
+      },
+      "state": {
+        "enum": [
+          "draft",
+          "review",
+          "approved",
+          "superseded"
+        ]
+      },
+      "review": {
+        "type": ["object", "null"],
+        "title": "Review",
+        "description": "Where review stands. Written only by designs.request_review, designs.approve and designs.request_changes; approved_rev is the revision an approval covers, and editing the design returns it to draft.",
+        "properties": {
+          "requested_by": { "type": ["string", "null"] },
+          "requested_at": { "type": ["string", "null"] },
+          "note": { "type": ["string", "null"] },
+          "decision": { "enum": ["approved", "changes_requested", null] },
+          "decided_by": { "type": ["string", "null"] },
+          "decided_at": { "type": ["string", "null"] },
+          "decision_note": { "type": ["string", "null"] },
+          "approved_rev": { "type": ["integer", "null"] },
+          "self_approved": { "type": ["boolean", "null"] },
+          "reopened_from": { "enum": ["review", "approved", null] }
+        },
+        "additionalProperties": false
+      },
+      "cites": {
+        "type": "array",
+        "description": "Ids of the approved designs this one is built from. A template is CITED, never copied: a copy drifts the moment the original changes, and afterwards nothing can say which screens drifted. It is the same argument a panel makes for citing a metric rather than carrying its own SQL.",
+        "items": {
+          "type": "string"
+        }
+      },
+      "generated_by": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "The actor or model that emitted this spec. Null when a person authored it directly. Written by whatever files the design, because a platform whose thesis is provenance cannot have its generated work claim a human author."
+      },
+      "sources": {
+        "type": "array",
+        "description": "What the spec was derived from, as object ids. When one of them revises, this design is stale \u2014 the same mechanism a diagram generated from files already uses.",
+        "items": {
+          "type": "string"
+        }
+      },
+      "spec": {
+        "type": "object",
+        "title": "Screens",
+        "required": [
+          "screens"
+        ],
+        "description": "The design itself, declarative and never markup. An agent emits screens and the role of each element; the renderer draws them. Markup emitted by an agent cannot be diffed, cannot be reviewed as a proposal, and cannot be rendered without a sandbox - which is the same reason a panel is a mark plus a binding rather than authored SQL.",
+        "properties": {
+          "screens": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "w",
+                "h"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "dx": {
+                  "type": "number",
+                  "description": "Inside a container: shift from where the layout places it, in device pixels. Ignored when x and y are set."
+                },
+                "dy": {
+                  "type": "number",
+                  "description": "Inside a container: shift from where the layout places it, in device pixels. Ignored when x and y are set."
+                },
+                "w": {
+                  "type": "number",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "number",
+                  "minimum": 1
+                },
+                "elements": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "role"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "role": {
+                        "enum": [
+                          "heading",
+                          "body",
+                          "button",
+                          "input",
+                          "image",
+                          "list",
+                          "nav",
+                          "card",
+                          "divider",
+                          "logo",
+                          "avatar",
+                          "badge",
+                          "icon",
+                          "tabbar",
+                          "field-label"
+                        ]
+                      },
+                      "text": {
+                        "type": "string"
+                      },
+                      "textStyle": {
+                        "type": "string",
+                        "description": "Font-size token path, such as font.size.body. fontSize overrides this link."
+                      },
+                      "fontSize": { "type": "number", "minimum": 1, "maximum": 240 },
+                      "fontWeight": { "type": "integer", "minimum": 100, "maximum": 900 },
+                      "lineHeight": { "type": "number", "minimum": 0.8, "maximum": 3 },
+                      "textAlign": { "enum": ["left", "center", "right"] },
+                      "cites": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "description": "Provenance: a token path or component reference, checked against the resolved palette. This does not set paint or typography; use tone/color and textStyle/fontSize for those. A palette match verifies the citation only, not visual conformance."
+                      },
+                      "x": {
+                        "type": "number",
+                        "description": "Absolute position in device pixels. Omit inside a container \u2014 the layout places it."
+                      },
+                      "y": {
+                        "type": "number",
+                        "description": "Absolute position in device pixels. Omit inside a container \u2014 the layout places it."
+                      },
+                      "dx": {
+                        "type": "number",
+                        "description": "Inside a container: shift from where the layout places it, in device pixels. Ignored when x and y are set."
+                      },
+                      "dy": {
+                        "type": "number",
+                        "description": "Inside a container: shift from where the layout places it, in device pixels. Ignored when x and y are set."
+                      },
+                      "w": {
+                        "type": "number",
+                        "minimum": 0,
+                        "description": "Absolute position in device pixels. Omit inside a container \u2014 the layout places it."
+                      },
+                      "h": {
+                        "type": "number",
+                        "minimum": 0,
+                        "description": "Absolute position in device pixels. Omit inside a container \u2014 the layout places it."
+                      },
+                      "tone": {
+                        "enum": [
+                          "default",
+                          "accent",
+                          "muted",
+                          "danger",
+                          "onAccent"
+                        ],
+                        "description": "Which role in the palette this element plays. The renderer resolves it through the token set, so one token change restyles every element playing that role - the reason tokens exist at all."
+                      },
+                      "color": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "description": "A colour token path from this design's palette \u2014 `color.accent`, `color.surface`, whatever the system defines \u2014 or a hex literal like `#ff00cc`. Wins over `tone` when both are set.\n\nA token is the better thing to say, and a role better still: both follow the system when the system moves, and a literal follows nothing. It is allowed because sometimes the colour you need is not in the palette yet; it is reported as off-palette wherever the design is summarised, because a colour that cannot follow the system is drift whatever it looks like."
+                      },
+                      "src": {
+                        "type": "string",
+                        "description": "Asset id or https URL for an image. Absent draws a placeholder, which is honest about there being no picture yet rather than inventing one."
+                      },
+                      "goto": {
+                        "type": "string",
+                        "description": "Screen id this navigates to when clicked. This is how a prototype is click-through without a line of model-written JavaScript: the spec names a destination and the renderer owns the behaviour."
+                      },
+                      "layout": {
+                        "enum": [
+                          "row",
+                          "column"
+                        ],
+                        "description": "Lay children out in a flex row or column instead of absolutely. This is what makes a design responsive: the container reflows, rather than every box carrying a coordinate that is only right at one width."
+                      },
+                      "gap": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "pad": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "align": {
+                        "enum": [
+                          "start",
+                          "center",
+                          "end",
+                          "between"
+                        ]
+                      },
+                      "children": {
+                        "type": "array",
+                        "description": "Children laid out by this element. One level deep on purpose \u2014 a recursive schema is a bet on how the generation API handles $ref, and a row of leaves covers most of what a screen needs.",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "role"
+                          ],
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "role": {
+                              "enum": [
+                                "heading",
+                                "body",
+                                "button",
+                                "input",
+                                "image",
+                                "list",
+                                "nav",
+                                "card",
+                                "divider",
+                                "logo",
+                                "avatar",
+                                "badge",
+                                "icon",
+                                "tabbar",
+                                "field-label"
+                              ]
+                            },
+                            "text": {
+                              "type": "string"
+                            },
+                            "textStyle": {
+                              "type": "string",
+                              "description": "Font-size token path, such as font.size.body. fontSize overrides this link."
+                            },
+                            "fontSize": { "type": "number", "minimum": 1, "maximum": 240 },
+                            "fontWeight": { "type": "integer", "minimum": 100, "maximum": 900 },
+                            "lineHeight": { "type": "number", "minimum": 0.8, "maximum": 3 },
+                            "textAlign": { "enum": ["left", "center", "right"] },
+                            "cites": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "Provenance: a token path or component reference, checked against the resolved palette. This does not set paint or typography; use tone/color and textStyle/fontSize for those. A palette match verifies the citation only, not visual conformance."
+                            },
+                            "x": {
+                              "type": "number",
+                              "description": "Absolute position in device pixels. Omit inside a container \u2014 the layout places it."
+                            },
+                            "y": {
+                              "type": "number",
+                              "description": "Absolute position in device pixels. Omit inside a container \u2014 the layout places it."
+                            },
+                            "dx": {
+                              "type": "number",
+                              "description": "Inside a container: shift from where the layout places it, in device pixels. Ignored when x and y are set."
+                            },
+                            "dy": {
+                              "type": "number",
+                              "description": "Inside a container: shift from where the layout places it, in device pixels. Ignored when x and y are set."
+                            },
+                            "w": {
+                              "type": "number",
+                              "minimum": 0,
+                              "description": "Absolute position in device pixels. Omit inside a container \u2014 the layout places it."
+                            },
+                            "h": {
+                              "type": "number",
+                              "minimum": 0,
+                              "description": "Absolute position in device pixels. Omit inside a container \u2014 the layout places it."
+                            },
+                            "tone": {
+                              "enum": [
+                                "default",
+                                "accent",
+                                "muted",
+                                "danger",
+                                "onAccent"
+                              ],
+                              "description": "Which role in the palette this element plays. The renderer resolves it through the token set, so one token change restyles every element playing that role - the reason tokens exist at all."
+                            },
+                            "color": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "A colour token path from this design's palette \u2014 `color.accent`, `color.surface`, whatever the system defines \u2014 or a hex literal like `#ff00cc`. Wins over `tone` when both are set.\n\nA token is the better thing to say, and a role better still: both follow the system when the system moves, and a literal follows nothing. It is allowed because sometimes the colour you need is not in the palette yet; it is reported as off-palette wherever the design is summarised, because a colour that cannot follow the system is drift whatever it looks like."
+                            },
+                            "src": {
+                              "type": "string",
+                              "description": "Asset id or https URL for an image. Absent draws a placeholder, which is honest about there being no picture yet rather than inventing one."
+                            },
+                            "goto": {
+                              "type": "string",
+                              "description": "Screen id this navigates to when clicked. This is how a prototype is click-through without a line of model-written JavaScript: the spec names a destination and the renderer owns the behaviour."
+                            },
+                            "layout": {
+                              "enum": [
+                                "row",
+                                "column"
+                              ],
+                              "description": "Lay children out in a flex row or column instead of absolutely. This is what makes a design responsive: the container reflows, rather than every box carrying a coordinate that is only right at one width."
+                            },
+                            "gap": {
+                              "type": "number",
+                              "minimum": 0
+                            },
+                            "pad": {
+                              "type": "number",
+                              "minimum": 0
+                            },
+                            "align": {
+                              "enum": [
+                                "start",
+                                "center",
+                                "end",
+                                "between"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "tokens": {
+            "type": "object",
+            "description": "Design tokens in the W3C DTCG shape - each entry is {$value, $type}, keyed by path (color.accent, radius.md). This is the ratified-definition layer for design, and it is a published standard rather than a private format: the same file is what design tools and token build tools already read. An element cites a token path, and a citation that does not resolve is off-system.",
+            "additionalProperties": {
+              "type": "object",
+              "required": [
+                "$value"
+              ],
+              "properties": {
+                "$value": {
+                  "type": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "$type": {
+                  "enum": [
+                    "color",
+                    "dimension",
+                    "fontFamily",
+                    "fontWeight",
+                    "number",
+                    "shadow"
+                  ]
+                },
+                "$description": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "additionalProperties": false
+  },
+  "presenting": {
+    "key": "key",
+    "title": "title",
+    "subtitle": [
+      "surface"
+    ],
+    "status": "state"
+  },
+  "facets": [
+    {
+      "kind": "enum",
+      "field": "surface",
+      "values": [
+        "mobile",
+        "web",
+        "email"
+      ]
+    },
+    {
+      "kind": "enum",
+      "field": "state",
+      "values": [
+        "draft",
+        "review",
+        "approved",
+        "superseded"
+      ]
+    },
+    {
+      "kind": "enum",
+      "field": "space"
+    }
+  ],
+  "measures": [],
+  "prose": [
+    "title",
+    "description",
+    "spec.screens.name",
+    "spec..text",
+    "review.decision_note"
+  ],
+  "parts": [
+    "decisions"
+  ],
+  "relations": [
+    "design.cites.design"
+  ],
+  "version": 1,
+  "status": "ratified",
+  "_note": "Graph-backed on purpose. A design is an instance that gets proposed and revised like a dashboard, not a definition with its own lifecycle like a metric. The template/instance split is expressed by citation and `state`, not by a second store."
+}

@@ -1,0 +1,1854 @@
+{
+  "title": "Starter · Approval & review",
+  "description": "An enterprise review flow with request details, supporting context, a recorded decision, empty/loading/error states, and mobile layouts.",
+  "template_kind": "layout",
+  "surface": "web",
+  "state": "approved",
+  "cites": [],
+  "spec": {
+    "tokens": {
+      "color.bg": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "color.surface": {
+        "$type": "color",
+        "$value": "#f1f6f5"
+      },
+      "color.text": {
+        "$type": "color",
+        "$value": "#16332f"
+      },
+      "color.muted": {
+        "$type": "color",
+        "$value": "#627973"
+      },
+      "color.accent": {
+        "$type": "color",
+        "$value": "#167562"
+      },
+      "color.onAccent": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "color.border": {
+        "$type": "color",
+        "$value": "#dce7e3"
+      },
+      "color.danger": {
+        "$type": "color",
+        "$value": "#b6443e"
+      },
+      "radius.md": {
+        "$type": "dimension",
+        "$value": 14
+      },
+      "font.size.body": {
+        "$type": "dimension",
+        "$value": 14
+      },
+      "font.size.heading": {
+        "$type": "dimension",
+        "$value": 28
+      }
+    },
+    "screens": [
+      {
+        "id": "inbox",
+        "name": "Review inbox",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "pad": 20,
+            "gap": 20,
+            "align": "center",
+            "children": [
+              {
+                "id": "brand",
+                "role": "logo",
+                "text": "Example Co Review",
+                "h": 38,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "w": 560
+              },
+              {
+                "id": "nav-inbox",
+                "role": "button",
+                "text": "Review inbox",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "tone": "muted",
+                "w": 170
+              },
+              {
+                "id": "nav-states",
+                "role": "button",
+                "text": "Example states",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "empty",
+                "tone": "muted",
+                "w": 180
+              },
+              {
+                "id": "nav-mobile",
+                "role": "button",
+                "text": "Mobile version",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "mobile-inbox",
+                "tone": "muted",
+                "w": 200
+              }
+            ]
+          },
+          {
+            "id": "page-title",
+            "role": "heading",
+            "text": "A clear path from context to decision.",
+            "x": 64,
+            "y": 122,
+            "w": 1152,
+            "h": 44,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "page-subtitle",
+            "role": "body",
+            "text": "TEAM REVIEWS · 2 requests awaiting review · Payments workspace",
+            "x": 64,
+            "y": 180,
+            "w": 1152,
+            "h": 34,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "request-checkout",
+            "role": "card",
+            "x": 64,
+            "y": 248,
+            "w": 720,
+            "h": 224,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 22,
+            "gap": 10,
+            "children": [
+              {
+                "w": 674,
+                "id": "checkout-label",
+                "role": "field-label",
+                "text": "PRODUCT · REQUEST RV-104",
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "w": 674,
+                "id": "checkout-title",
+                "role": "heading",
+                "text": "Checkout rollout",
+                "h": 40,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 674,
+                "id": "checkout-description",
+                "role": "body",
+                "text": "Maya requests a staged launch. Review the brief, experiment evidence and rollback plan together.",
+                "h": 44,
+                "cites": "color.text"
+              },
+              {
+                "w": 674,
+                "id": "checkout-open",
+                "role": "button",
+                "text": "Review request →",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "request",
+                "tone": "accent"
+              }
+            ]
+          },
+          {
+            "id": "request-support",
+            "role": "card",
+            "x": 64,
+            "y": 496,
+            "w": 720,
+            "h": 224,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 22,
+            "gap": 10,
+            "children": [
+              {
+                "w": 674,
+                "id": "support-label",
+                "role": "field-label",
+                "text": "OPERATIONS · REQUEST RV-105",
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "w": 674,
+                "id": "support-title",
+                "role": "heading",
+                "text": "Support handoff",
+                "h": 40,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 674,
+                "id": "support-description",
+                "role": "body",
+                "text": "An example of the next item in the queue. Open the shared evidence view to inspect the handoff checklist.",
+                "h": 44,
+                "cites": "color.text"
+              },
+              {
+                "w": 674,
+                "id": "support-open",
+                "role": "button",
+                "text": "Open supporting context",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "evidence",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "review-guide",
+            "role": "card",
+            "x": 816,
+            "y": 248,
+            "w": 400,
+            "h": 472,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 24,
+            "gap": 12,
+            "children": [
+              {
+                "w": 350,
+                "id": "guide-title",
+                "role": "heading",
+                "text": "Before you decide",
+                "h": 40,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 350,
+                "id": "guide-context",
+                "role": "body",
+                "text": "1. Understand the request and who owns it.",
+                "h": 48,
+                "cites": "color.text"
+              },
+              {
+                "w": 350,
+                "id": "guide-evidence",
+                "role": "body",
+                "text": "2. Read the source summaries and check what is still uncertain.",
+                "h": 64,
+                "cites": "color.text"
+              },
+              {
+                "w": 350,
+                "id": "guide-decision",
+                "role": "body",
+                "text": "3. Leave a reason someone else can follow.",
+                "h": 48,
+                "cites": "color.text"
+              },
+              {
+                "w": 350,
+                "id": "guide-note",
+                "role": "body",
+                "text": "This starter demonstrates a review workflow, not a live approval system.",
+                "h": 64,
+                "cites": "color.text",
+                "tone": "muted"
+              },
+              {
+                "w": 350,
+                "id": "guide-states",
+                "role": "button",
+                "text": "Explore empty and error states",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "empty",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "demo-note",
+            "role": "body",
+            "text": "Prototype only · All requests, evidence and decisions are sample content. Nothing is submitted.",
+            "x": 64,
+            "y": 850,
+            "w": 1152,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "request",
+        "name": "Request details",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "pad": 20,
+            "gap": 20,
+            "align": "center",
+            "children": [
+              {
+                "id": "brand",
+                "role": "logo",
+                "text": "Example Co Review",
+                "h": 38,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "w": 560
+              },
+              {
+                "id": "nav-inbox",
+                "role": "button",
+                "text": "Review inbox",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "tone": "muted",
+                "w": 170
+              },
+              {
+                "id": "nav-states",
+                "role": "button",
+                "text": "Example states",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "empty",
+                "tone": "muted",
+                "w": 180
+              },
+              {
+                "id": "nav-mobile",
+                "role": "button",
+                "text": "Mobile version",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "mobile-inbox",
+                "tone": "muted",
+                "w": 200
+              }
+            ]
+          },
+          {
+            "id": "page-title",
+            "role": "heading",
+            "text": "Checkout rollout",
+            "x": 64,
+            "y": 122,
+            "w": 1152,
+            "h": 44,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "page-subtitle",
+            "role": "body",
+            "text": "RV-104 · Requested by Maya Ortiz · Product / Payments",
+            "x": 64,
+            "y": 180,
+            "w": 1152,
+            "h": 34,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "request-summary",
+            "role": "card",
+            "x": 64,
+            "y": 248,
+            "w": 704,
+            "h": 446,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 24,
+            "gap": 12,
+            "children": [
+              {
+                "w": 654,
+                "id": "request-status",
+                "role": "badge",
+                "text": "Awaiting review",
+                "h": 24,
+                "cites": "color.accent"
+              },
+              {
+                "w": 654,
+                "id": "request-heading",
+                "role": "heading",
+                "text": "Launch to 10% of workspaces",
+                "h": 40,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 654,
+                "id": "request-context",
+                "role": "body",
+                "text": "The new checkout reduces the steps from five to three. Start with a limited rollout and keep the current checkout as a fallback.",
+                "h": 72,
+                "cites": "color.text"
+              },
+              {
+                "w": 654,
+                "id": "request-owner",
+                "role": "body",
+                "text": "Owner: Maya Ortiz\nRollout window: after review\nRollback: restore the current checkout",
+                "h": 72,
+                "cites": "color.text"
+              },
+              {
+                "w": 654,
+                "id": "request-rule",
+                "role": "divider",
+                "text": "",
+                "h": 1,
+                "cites": "color.border"
+              },
+              {
+                "w": 654,
+                "id": "request-evidence",
+                "role": "button",
+                "text": "Read supporting evidence →",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "evidence",
+                "tone": "accent"
+              }
+            ]
+          },
+          {
+            "id": "decision-panel",
+            "role": "card",
+            "x": 800,
+            "y": 248,
+            "w": 416,
+            "h": 446,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 24,
+            "gap": 12,
+            "children": [
+              {
+                "w": 366,
+                "id": "decision-heading",
+                "role": "heading",
+                "text": "Make the call",
+                "h": 40,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 366,
+                "id": "decision-guidance",
+                "role": "body",
+                "text": "Record why this is ready and the condition you want the owner to monitor.",
+                "h": 64,
+                "cites": "color.text"
+              },
+              {
+                "w": 366,
+                "id": "decision-note-label",
+                "role": "field-label",
+                "text": "DECISION NOTE · DEMO INPUT",
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "w": 366,
+                "id": "decision-note",
+                "role": "input",
+                "text": "Add your reasoning…",
+                "h": 54,
+                "cites": "color.text"
+              },
+              {
+                "w": 366,
+                "id": "decision-approve",
+                "role": "button",
+                "text": "Approve staged rollout",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "approved",
+                "tone": "accent"
+              },
+              {
+                "w": 366,
+                "id": "decision-later",
+                "role": "button",
+                "text": "Review later",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "request-error-link",
+            "role": "button",
+            "text": "Preview unavailable context",
+            "x": 64,
+            "y": 734,
+            "w": 304,
+            "h": 44,
+            "cites": "color.accent",
+            "tone": "muted",
+            "goto": "error"
+          },
+          {
+            "id": "demo-note",
+            "role": "body",
+            "text": "Prototype only · All requests, evidence and decisions are sample content. Nothing is submitted.",
+            "x": 64,
+            "y": 850,
+            "w": 1152,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "evidence",
+        "name": "Supporting context",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "pad": 20,
+            "gap": 20,
+            "align": "center",
+            "children": [
+              {
+                "id": "brand",
+                "role": "logo",
+                "text": "Example Co Review",
+                "h": 38,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "w": 560
+              },
+              {
+                "id": "nav-inbox",
+                "role": "button",
+                "text": "Review inbox",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "tone": "muted",
+                "w": 170
+              },
+              {
+                "id": "nav-states",
+                "role": "button",
+                "text": "Example states",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "empty",
+                "tone": "muted",
+                "w": 180
+              },
+              {
+                "id": "nav-mobile",
+                "role": "button",
+                "text": "Mobile version",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "mobile-inbox",
+                "tone": "muted",
+                "w": 200
+              }
+            ]
+          },
+          {
+            "id": "page-title",
+            "role": "heading",
+            "text": "The evidence behind the request.",
+            "x": 64,
+            "y": 122,
+            "w": 1152,
+            "h": 44,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "page-subtitle",
+            "role": "body",
+            "text": "Sample source summaries · Demonstrate provenance without inventing live integrations",
+            "x": 64,
+            "y": 180,
+            "w": 1152,
+            "h": 34,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "product-evidence",
+            "role": "card",
+            "x": 64,
+            "y": 248,
+            "w": 560,
+            "h": 430,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 24,
+            "gap": 12,
+            "children": [
+              {
+                "w": 510,
+                "id": "brief-label",
+                "role": "field-label",
+                "text": "SOURCE 01 · PRODUCT BRIEF · SAMPLE",
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "w": 510,
+                "id": "brief-heading",
+                "role": "heading",
+                "text": "A simpler checkout",
+                "h": 40,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 510,
+                "id": "brief-summary",
+                "role": "body",
+                "text": "Customers lose their place when moving between address, payment and confirmation. Keep those steps together and show the order total throughout.",
+                "h": 86,
+                "cites": "color.text"
+              },
+              {
+                "w": 510,
+                "id": "brief-constraint",
+                "role": "body",
+                "text": "Constraint: the existing checkout remains available for rollback. Do not expand beyond the first cohort until support reviews the results.",
+                "h": 86,
+                "cites": "color.text"
+              },
+              {
+                "w": 510,
+                "id": "brief-owner",
+                "role": "body",
+                "text": "Document owner: Product team · Included as editable sample copy.",
+                "h": 48,
+                "cites": "color.text",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "rollout-evidence",
+            "role": "card",
+            "x": 656,
+            "y": 248,
+            "w": 560,
+            "h": 430,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 24,
+            "gap": 12,
+            "children": [
+              {
+                "w": 510,
+                "id": "experiment-label",
+                "role": "field-label",
+                "text": "SOURCE 02 · EXPERIMENT READOUT · SAMPLE",
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "w": 510,
+                "id": "experiment-heading",
+                "role": "heading",
+                "text": "Promising, with a limit",
+                "h": 40,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 510,
+                "id": "experiment-summary",
+                "role": "body",
+                "text": "Sample completion: 68% → 73%.\nThe illustrative result supports a small rollout, not a claim about every customer segment.",
+                "h": 86,
+                "cites": "color.text"
+              },
+              {
+                "w": 510,
+                "id": "checklist-summary",
+                "role": "body",
+                "text": "SOURCE 03 · ROLLOUT CHECKLIST\nOwner assigned. Rollback documented. Watch payment failures and support volume.",
+                "h": 86,
+                "cites": "color.text"
+              },
+              {
+                "w": 510,
+                "id": "evidence-caution",
+                "role": "body",
+                "text": "These figures are fictional; replace them with cited enterprise context.",
+                "h": 48,
+                "cites": "color.text",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "evidence-back",
+            "role": "button",
+            "text": "Back to request",
+            "x": 64,
+            "y": 722,
+            "w": 264,
+            "h": 46,
+            "cites": "color.accent",
+            "goto": "request"
+          },
+          {
+            "id": "evidence-unavailable",
+            "role": "button",
+            "text": "Preview source error",
+            "x": 348,
+            "y": 722,
+            "w": 264,
+            "h": 46,
+            "cites": "color.accent",
+            "tone": "muted",
+            "goto": "error"
+          },
+          {
+            "id": "demo-note",
+            "role": "body",
+            "text": "Prototype only · All requests, evidence and decisions are sample content. Nothing is submitted.",
+            "x": 64,
+            "y": 850,
+            "w": 1152,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "approved",
+        "name": "Decision recorded",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "pad": 20,
+            "gap": 20,
+            "align": "center",
+            "children": [
+              {
+                "id": "brand",
+                "role": "logo",
+                "text": "Example Co Review",
+                "h": 38,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "w": 560
+              },
+              {
+                "id": "nav-inbox",
+                "role": "button",
+                "text": "Review inbox",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "tone": "muted",
+                "w": 170
+              },
+              {
+                "id": "nav-states",
+                "role": "button",
+                "text": "Example states",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "empty",
+                "tone": "muted",
+                "w": 180
+              },
+              {
+                "id": "nav-mobile",
+                "role": "button",
+                "text": "Mobile version",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "mobile-inbox",
+                "tone": "muted",
+                "w": 200
+              }
+            ]
+          },
+          {
+            "id": "page-title",
+            "role": "heading",
+            "text": "A decision with a reason.",
+            "x": 64,
+            "y": 122,
+            "w": 1152,
+            "h": 44,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "page-subtitle",
+            "role": "body",
+            "text": "Example success state · This prototype has not approved a real request",
+            "x": 64,
+            "y": 180,
+            "w": 1152,
+            "h": 34,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "decision-record",
+            "role": "card",
+            "x": 288,
+            "y": 252,
+            "w": 704,
+            "h": 472,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 24,
+            "gap": 10,
+            "children": [
+              {
+                "w": 654,
+                "id": "approved-status",
+                "role": "badge",
+                "text": "Approved · example",
+                "h": 24,
+                "cites": "color.accent"
+              },
+              {
+                "w": 654,
+                "id": "approved-title",
+                "role": "heading",
+                "text": "Staged rollout approved",
+                "h": 40,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 654,
+                "id": "approved-request",
+                "role": "body",
+                "text": "RV-104 · Checkout rollout\nReviewer: Maya Ortiz · Example decision",
+                "h": 52,
+                "cites": "color.text"
+              },
+              {
+                "w": 654,
+                "id": "approved-reason",
+                "role": "body",
+                "text": "Example reason: proceed with the first cohort. Keep rollback available and check payment failures before expanding.",
+                "h": 72,
+                "cites": "color.text"
+              },
+              {
+                "w": 654,
+                "id": "approved-provenance",
+                "role": "body",
+                "text": "Supporting context: product brief, experiment readout and rollout checklist. The demo note field is not saved.",
+                "h": 64,
+                "cites": "color.text",
+                "tone": "muted"
+              },
+              {
+                "w": 654,
+                "id": "approved-inbox",
+                "role": "button",
+                "text": "Return to review inbox",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "tone": "accent"
+              },
+              {
+                "w": 654,
+                "id": "approved-evidence",
+                "role": "button",
+                "text": "Revisit supporting context",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "evidence",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "demo-note",
+            "role": "body",
+            "text": "Prototype only · All requests, evidence and decisions are sample content. Nothing is submitted.",
+            "x": 64,
+            "y": 850,
+            "w": 1152,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "empty",
+        "name": "Empty inbox",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "pad": 20,
+            "gap": 20,
+            "align": "center",
+            "children": [
+              {
+                "id": "brand",
+                "role": "logo",
+                "text": "Example Co Review",
+                "h": 38,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "w": 560
+              },
+              {
+                "id": "nav-inbox",
+                "role": "button",
+                "text": "Review inbox",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "tone": "muted",
+                "w": 170
+              },
+              {
+                "id": "nav-states",
+                "role": "button",
+                "text": "Example states",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "empty",
+                "tone": "muted",
+                "w": 180
+              },
+              {
+                "id": "nav-mobile",
+                "role": "button",
+                "text": "Mobile version",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "mobile-inbox",
+                "tone": "muted",
+                "w": 200
+              }
+            ]
+          },
+          {
+            "id": "page-title",
+            "role": "heading",
+            "text": "Nothing waiting on you.",
+            "x": 64,
+            "y": 122,
+            "w": 1152,
+            "h": 44,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "page-subtitle",
+            "role": "body",
+            "text": "Example empty state · Keep the next action clear",
+            "x": 64,
+            "y": 180,
+            "w": 1152,
+            "h": 34,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "empty-card",
+            "role": "card",
+            "x": 288,
+            "y": 252,
+            "w": 704,
+            "h": 398,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 24,
+            "gap": 12,
+            "children": [
+              {
+                "w": 654,
+                "id": "empty-badge",
+                "role": "badge",
+                "text": "All caught up",
+                "h": 24,
+                "cites": "color.accent"
+              },
+              {
+                "w": 654,
+                "id": "empty-title",
+                "role": "heading",
+                "text": "Your review queue is clear",
+                "h": 40,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 654,
+                "id": "empty-copy",
+                "role": "body",
+                "text": "New requests will appear here with an owner, a summary and the context needed to make a decision.",
+                "h": 64,
+                "cites": "color.text"
+              },
+              {
+                "w": 654,
+                "id": "empty-inbox",
+                "role": "button",
+                "text": "Open the sample review queue",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "tone": "accent"
+              },
+              {
+                "w": 654,
+                "id": "empty-loading",
+                "role": "button",
+                "text": "Preview loading state",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "loading",
+                "tone": "muted"
+              },
+              {
+                "w": 654,
+                "id": "empty-error",
+                "role": "button",
+                "text": "Preview unavailable context",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "error",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "demo-note",
+            "role": "body",
+            "text": "Prototype only · All requests, evidence and decisions are sample content. Nothing is submitted.",
+            "x": 64,
+            "y": 850,
+            "w": 1152,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "error",
+        "name": "Context unavailable",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "pad": 20,
+            "gap": 20,
+            "align": "center",
+            "children": [
+              {
+                "id": "brand",
+                "role": "logo",
+                "text": "Example Co Review",
+                "h": 38,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "w": 560
+              },
+              {
+                "id": "nav-inbox",
+                "role": "button",
+                "text": "Review inbox",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "tone": "muted",
+                "w": 170
+              },
+              {
+                "id": "nav-states",
+                "role": "button",
+                "text": "Example states",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "empty",
+                "tone": "muted",
+                "w": 180
+              },
+              {
+                "id": "nav-mobile",
+                "role": "button",
+                "text": "Mobile version",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "mobile-inbox",
+                "tone": "muted",
+                "w": 200
+              }
+            ]
+          },
+          {
+            "id": "page-title",
+            "role": "heading",
+            "text": "A source could not be loaded.",
+            "x": 64,
+            "y": 122,
+            "w": 1152,
+            "h": 44,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "page-subtitle",
+            "role": "body",
+            "text": "Example error state · Do not hide missing evidence behind a finished-looking review",
+            "x": 64,
+            "y": 180,
+            "w": 1152,
+            "h": 34,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "error-card",
+            "role": "card",
+            "x": 288,
+            "y": 252,
+            "w": 704,
+            "h": 398,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 24,
+            "gap": 10,
+            "children": [
+              {
+                "w": 654,
+                "id": "error-label",
+                "role": "field-label",
+                "text": "SUPPORTING CONTEXT UNAVAILABLE",
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "w": 654,
+                "id": "error-title",
+                "role": "heading",
+                "text": "You can still return to the request",
+                "h": 76,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 654,
+                "id": "error-copy",
+                "role": "body",
+                "text": "The source may be unavailable or access may have changed. Check access or retry before making the decision.",
+                "h": 64,
+                "cites": "color.text"
+              },
+              {
+                "w": 654,
+                "id": "error-retry",
+                "role": "button",
+                "text": "Retry · show loaded context",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "evidence",
+                "tone": "accent"
+              },
+              {
+                "w": 654,
+                "id": "error-request",
+                "role": "button",
+                "text": "Back to request",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "request",
+                "tone": "muted"
+              },
+              {
+                "w": 654,
+                "id": "error-loading",
+                "role": "button",
+                "text": "Preview loading state",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "loading",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "demo-note",
+            "role": "body",
+            "text": "Prototype only · All requests, evidence and decisions are sample content. Nothing is submitted.",
+            "x": 64,
+            "y": 850,
+            "w": 1152,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "loading",
+        "name": "Loading context",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "pad": 20,
+            "gap": 20,
+            "align": "center",
+            "children": [
+              {
+                "id": "brand",
+                "role": "logo",
+                "text": "Example Co Review",
+                "h": 38,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "w": 560
+              },
+              {
+                "id": "nav-inbox",
+                "role": "button",
+                "text": "Review inbox",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "inbox",
+                "tone": "muted",
+                "w": 170
+              },
+              {
+                "id": "nav-states",
+                "role": "button",
+                "text": "Example states",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "empty",
+                "tone": "muted",
+                "w": 180
+              },
+              {
+                "id": "nav-mobile",
+                "role": "button",
+                "text": "Mobile version",
+                "h": 40,
+                "cites": "color.accent",
+                "goto": "mobile-inbox",
+                "tone": "muted",
+                "w": 200
+              }
+            ]
+          },
+          {
+            "id": "page-title",
+            "role": "heading",
+            "text": "Getting the context together.",
+            "x": 64,
+            "y": 122,
+            "w": 1152,
+            "h": 44,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "page-subtitle",
+            "role": "body",
+            "text": "Example loading state · A static design screen, not a live network request",
+            "x": 64,
+            "y": 180,
+            "w": 1152,
+            "h": 34,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "loading-card",
+            "role": "card",
+            "x": 288,
+            "y": 252,
+            "w": 704,
+            "h": 364,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 24,
+            "gap": 12,
+            "children": [
+              {
+                "w": 654,
+                "id": "loading-label",
+                "role": "badge",
+                "text": "Loading · example",
+                "h": 24,
+                "cites": "color.accent"
+              },
+              {
+                "w": 654,
+                "id": "loading-title",
+                "role": "heading",
+                "text": "Gathering supporting sources",
+                "h": 40,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 654,
+                "id": "loading-brief",
+                "role": "body",
+                "text": "Product brief · Waiting for source\nExperiment readout · Waiting for source\nRollout checklist · Waiting for source",
+                "h": 80,
+                "cites": "color.text",
+                "tone": "muted"
+              },
+              {
+                "w": 654,
+                "id": "loading-done",
+                "role": "button",
+                "text": "Show loaded context",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "evidence",
+                "tone": "accent"
+              },
+              {
+                "w": 654,
+                "id": "loading-error",
+                "role": "button",
+                "text": "Show a source failure",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "error",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "demo-note",
+            "role": "body",
+            "text": "Prototype only · All requests, evidence and decisions are sample content. Nothing is submitted.",
+            "x": 64,
+            "y": 850,
+            "w": 1152,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "mobile-inbox",
+        "name": "Mobile · Review inbox",
+        "w": 390,
+        "h": 844,
+        "elements": [
+          {
+            "id": "mobile-brand",
+            "role": "logo",
+            "text": "Example Co Review",
+            "x": 24,
+            "y": 24,
+            "w": 270,
+            "h": 36,
+            "cites": "color.accent",
+            "goto": "mobile-inbox"
+          },
+          {
+            "id": "mobile-rule",
+            "role": "divider",
+            "x": 24,
+            "y": 76,
+            "w": 342,
+            "h": 1,
+            "cites": "color.border"
+          },
+          {
+            "id": "mobile-inbox-title",
+            "role": "heading",
+            "text": "Your reviews",
+            "x": 24,
+            "y": 104,
+            "w": 342,
+            "h": 40,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "mobile-inbox-subtitle",
+            "role": "body",
+            "text": "1 sample request · Payments",
+            "x": 24,
+            "y": 154,
+            "w": 342,
+            "h": 26,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "mobile-inbox-card",
+            "role": "card",
+            "x": 24,
+            "y": 214,
+            "w": 342,
+            "h": 292,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 18,
+            "gap": 14,
+            "children": [
+              {
+                "w": 304,
+                "id": "mobile-request-status",
+                "role": "badge",
+                "text": "Awaiting review",
+                "h": 24,
+                "cites": "color.accent"
+              },
+              {
+                "w": 304,
+                "id": "mobile-request-title",
+                "role": "heading",
+                "text": "Checkout rollout",
+                "h": 38,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 304,
+                "id": "mobile-request-copy",
+                "role": "body",
+                "text": "Maya requests a staged launch. Review the context before approving.",
+                "h": 64,
+                "cites": "color.text"
+              },
+              {
+                "w": 304,
+                "id": "mobile-request-open",
+                "role": "button",
+                "text": "Review request →",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "mobile-request",
+                "tone": "accent"
+              }
+            ]
+          },
+          {
+            "id": "mobile-inbox-tip",
+            "role": "card",
+            "x": 24,
+            "y": 530,
+            "w": 342,
+            "h": 152,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 18,
+            "gap": 10,
+            "children": [
+              {
+                "w": 304,
+                "id": "mobile-tip-label",
+                "role": "field-label",
+                "text": "A DECISION OTHERS CAN FOLLOW",
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "w": 304,
+                "id": "mobile-tip-copy",
+                "role": "body",
+                "text": "Keep the request, evidence and reason together, even on a small screen.",
+                "h": 66,
+                "cites": "color.text"
+              }
+            ]
+          },
+          {
+            "id": "mobile-desktop",
+            "role": "button",
+            "text": "View desktop layout",
+            "x": 24,
+            "y": 718,
+            "w": 342,
+            "h": 44,
+            "cites": "color.accent",
+            "tone": "muted",
+            "goto": "inbox"
+          },
+          {
+            "id": "mobile-demo",
+            "role": "body",
+            "text": "Prototype only · Nothing is submitted.",
+            "x": 24,
+            "y": 792,
+            "w": 342,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "mobile-request",
+        "name": "Mobile · Request details",
+        "w": 390,
+        "h": 844,
+        "elements": [
+          {
+            "id": "mobile-brand",
+            "role": "logo",
+            "text": "Example Co Review",
+            "x": 24,
+            "y": 24,
+            "w": 270,
+            "h": 36,
+            "cites": "color.accent",
+            "goto": "mobile-inbox"
+          },
+          {
+            "id": "mobile-rule",
+            "role": "divider",
+            "x": 24,
+            "y": 76,
+            "w": 342,
+            "h": 1,
+            "cites": "color.border"
+          },
+          {
+            "id": "mobile-request-heading",
+            "role": "heading",
+            "text": "Checkout rollout",
+            "x": 24,
+            "y": 104,
+            "w": 342,
+            "h": 40,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "mobile-request-subtitle",
+            "role": "body",
+            "text": "RV-104 · Requested by Maya Ortiz",
+            "x": 24,
+            "y": 156,
+            "w": 342,
+            "h": 28,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "mobile-evidence-summary",
+            "role": "card",
+            "x": 24,
+            "y": 214,
+            "w": 342,
+            "h": 230,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 18,
+            "gap": 12,
+            "children": [
+              {
+                "w": 304,
+                "id": "mobile-context-label",
+                "role": "field-label",
+                "text": "CONTEXT SUMMARY · SAMPLE",
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "w": 304,
+                "id": "mobile-context-copy",
+                "role": "body",
+                "text": "Launch to 10% of workspaces. Keep rollback available and watch payment failures.",
+                "h": 68,
+                "cites": "color.text"
+              },
+              {
+                "w": 304,
+                "id": "mobile-context-evidence",
+                "role": "body",
+                "text": "Brief + readout + checklist\nSample completion: 68% → 73%",
+                "h": 56,
+                "cites": "color.text"
+              }
+            ]
+          },
+          {
+            "id": "mobile-note-label",
+            "role": "field-label",
+            "text": "DECISION NOTE · DEMO INPUT",
+            "x": 24,
+            "y": 480,
+            "w": 342,
+            "h": 18,
+            "cites": "color.text"
+          },
+          {
+            "id": "mobile-note",
+            "role": "input",
+            "text": "Add your reasoning…",
+            "x": 24,
+            "y": 512,
+            "w": 342,
+            "h": 52,
+            "cites": "color.text"
+          },
+          {
+            "id": "mobile-approve",
+            "role": "button",
+            "text": "Approve staged rollout",
+            "x": 24,
+            "y": 594,
+            "w": 342,
+            "h": 48,
+            "cites": "color.accent",
+            "goto": "mobile-approved"
+          },
+          {
+            "id": "mobile-evidence",
+            "role": "button",
+            "text": "Read full supporting context",
+            "x": 24,
+            "y": 658,
+            "w": 342,
+            "h": 44,
+            "cites": "color.accent",
+            "goto": "evidence",
+            "tone": "muted"
+          },
+          {
+            "id": "mobile-back",
+            "role": "button",
+            "text": "Back to reviews",
+            "x": 24,
+            "y": 718,
+            "w": 342,
+            "h": 44,
+            "cites": "color.accent",
+            "goto": "mobile-inbox",
+            "tone": "muted"
+          },
+          {
+            "id": "mobile-demo",
+            "role": "body",
+            "text": "Prototype only · Nothing is submitted.",
+            "x": 24,
+            "y": 792,
+            "w": 342,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "mobile-approved",
+        "name": "Mobile · Decision recorded",
+        "w": 390,
+        "h": 844,
+        "elements": [
+          {
+            "id": "mobile-brand",
+            "role": "logo",
+            "text": "Example Co Review",
+            "x": 24,
+            "y": 24,
+            "w": 270,
+            "h": 36,
+            "cites": "color.accent",
+            "goto": "mobile-inbox"
+          },
+          {
+            "id": "mobile-rule",
+            "role": "divider",
+            "x": 24,
+            "y": 76,
+            "w": 342,
+            "h": 1,
+            "cites": "color.border"
+          },
+          {
+            "id": "mobile-success-heading",
+            "role": "heading",
+            "text": "Decision recorded",
+            "x": 24,
+            "y": 104,
+            "w": 342,
+            "h": 40,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "mobile-success-subtitle",
+            "role": "body",
+            "text": "Example success state",
+            "x": 24,
+            "y": 156,
+            "w": 342,
+            "h": 28,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "mobile-decision-record",
+            "role": "card",
+            "x": 24,
+            "y": 214,
+            "w": 342,
+            "h": 418,
+            "cites": "color.border",
+            "layout": "column",
+            "pad": 18,
+            "gap": 14,
+            "children": [
+              {
+                "w": 304,
+                "id": "mobile-success-badge",
+                "role": "badge",
+                "text": "Approved · example",
+                "h": 24,
+                "cites": "color.accent"
+              },
+              {
+                "w": 304,
+                "id": "mobile-success-title",
+                "role": "heading",
+                "text": "Checkout rollout",
+                "h": 38,
+                "cites": "font.size.heading"
+              },
+              {
+                "w": 304,
+                "id": "mobile-success-reason",
+                "role": "body",
+                "text": "Example reason: proceed with the first cohort and monitor payment failures before expanding.",
+                "h": 88,
+                "cites": "color.text"
+              },
+              {
+                "w": 304,
+                "id": "mobile-success-note",
+                "role": "body",
+                "text": "The demo note is not saved. No real approval or notification has been sent.",
+                "h": 66,
+                "cites": "color.text",
+                "tone": "muted"
+              },
+              {
+                "w": 304,
+                "id": "mobile-success-inbox",
+                "role": "button",
+                "text": "Return to reviews",
+                "h": 44,
+                "cites": "color.accent",
+                "goto": "mobile-inbox",
+                "tone": "accent"
+              }
+            ]
+          },
+          {
+            "id": "mobile-success-desktop",
+            "role": "button",
+            "text": "View desktop decision",
+            "x": 24,
+            "y": 688,
+            "w": 342,
+            "h": 44,
+            "cites": "color.accent",
+            "goto": "approved",
+            "tone": "muted"
+          },
+          {
+            "id": "mobile-demo",
+            "role": "body",
+            "text": "Prototype only · Nothing is submitted.",
+            "x": 24,
+            "y": 792,
+            "w": 342,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      }
+    ]
+  }
+}

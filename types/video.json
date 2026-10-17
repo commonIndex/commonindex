@@ -1,0 +1,87 @@
+{
+  "id": "video",
+  "label": "Video",
+  "plural": "Videos",
+  "schema": {
+    "type": "object",
+    "required": [
+      "title"
+    ],
+    "properties": {
+      "title": {
+        "type": "string"
+      },
+      "space": {
+        "type": "string"
+      },
+      "brief": {
+        "type": "string",
+        "description": "What the video must say, for whom, and how long — the brief an agent writes the composition from."
+      },
+      "format": {
+        "enum": [
+          "landscape",
+          "portrait",
+          "square"
+        ],
+        "description": "landscape 1920x1080, portrait 1080x1920, square 1080x1080."
+      },
+      "state": {
+        "enum": [
+          "draft",
+          "rendering",
+          "ready",
+          "failed"
+        ],
+        "description": "draft until rendered; rendering while the renderer works; ready with a file; failed with the reason in render.error. Set by the gateway, not the caller."
+      },
+      "composition": {
+        "type": "string",
+        "description": "The video as one HTML composition: a root element with data-composition-id, data-width/data-height/data-duration, timed scenes with data-start/data-duration and class=\"clip\", animated with CSS keyframes or the Web Animations API. Self-contained: no external URLs, scripts, iframes or network calls. Saved with videos.save, which checks it."
+      },
+      "render": {
+        "type": "object",
+        "description": "The last render, written by the gateway: status, format, bytes, seconds, error, started_at, finished_at."
+      },
+      "sources": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Object ids the video was made from — a doc, dashboard, design, release."
+      }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "title",
+    "subtitle": [
+      "format"
+    ],
+    "preview": "brief",
+    "status": "state"
+  },
+  "facets": [
+    {
+      "kind": "enum",
+      "field": "state",
+      "values": [
+        "draft",
+        "rendering",
+        "ready",
+        "failed"
+      ]
+    },
+    {
+      "kind": "enum",
+      "field": "format",
+      "values": [
+        "landscape",
+        "portrait",
+        "square"
+      ]
+    }
+  ],
+  "version": 1,
+  "status": "ratified"
+}

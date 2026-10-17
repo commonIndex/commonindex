@@ -1,0 +1,860 @@
+{
+  "title": "Starter · Marketing site",
+  "description": "A SaaS landing page, pricing comparison, and signup flow with linked calls to action.",
+  "template_kind": "layout",
+  "surface": "web",
+  "state": "approved",
+  "cites": [],
+  "spec": {
+    "tokens": {
+      "color.bg": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "color.surface": {
+        "$type": "color",
+        "$value": "#f3f6fa"
+      },
+      "color.text": {
+        "$type": "color",
+        "$value": "#172033"
+      },
+      "color.muted": {
+        "$type": "color",
+        "$value": "#64748b"
+      },
+      "color.accent": {
+        "$type": "color",
+        "$value": "#0f766e"
+      },
+      "color.onAccent": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "color.border": {
+        "$type": "color",
+        "$value": "#dde5ee"
+      },
+      "color.danger": {
+        "$type": "color",
+        "$value": "#c2413a"
+      },
+      "radius.md": {
+        "$type": "dimension",
+        "$value": 14
+      },
+      "font.size.body": {
+        "$type": "dimension",
+        "$value": 15
+      },
+      "font.size.heading": {
+        "$type": "dimension",
+        "$value": 32
+      }
+    },
+    "screens": [
+      {
+        "id": "home",
+        "name": "Landing page",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "gap": 24,
+            "pad": 20,
+            "align": "center",
+            "children": [
+              {
+                "id": "nav-brand",
+                "role": "logo",
+                "text": "Example Co",
+                "w": 600,
+                "h": 36,
+                "cites": "color.accent",
+                "goto": "home"
+              },
+              {
+                "id": "nav-pricing",
+                "role": "button",
+                "text": "Pricing",
+                "w": 144,
+                "h": 40,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "pricing"
+              },
+              {
+                "id": "nav-start",
+                "role": "button",
+                "text": "Start your workspace",
+                "w": 220,
+                "h": 40,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "signup"
+              }
+            ]
+          },
+          {
+            "id": "eyebrow",
+            "role": "badge",
+            "text": "BUILT FOR FOCUSED TEAMS",
+            "x": 80,
+            "y": 132,
+            "w": 228,
+            "h": 28,
+            "cites": "color.accent"
+          },
+          {
+            "id": "hero-line1",
+            "role": "heading",
+            "text": "Great work starts",
+            "x": 80,
+            "y": 184,
+            "w": 552,
+            "h": 46,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "hero-line2",
+            "role": "heading",
+            "text": "with a shared plan.",
+            "x": 80,
+            "y": 234,
+            "w": 552,
+            "h": 46,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "hero-copy",
+            "role": "body",
+            "text": "Bring briefs, decisions, and delivery together. Give your team a clear path from the first idea to the next release.",
+            "x": 80,
+            "y": 306,
+            "w": 520,
+            "h": 76,
+            "cites": "color.text"
+          },
+          {
+            "id": "start-free",
+            "role": "button",
+            "text": "Start a free workspace",
+            "x": 80,
+            "y": 414,
+            "w": 228,
+            "h": 52,
+            "cites": "color.accent",
+            "goto": "signup",
+            "tone": "accent"
+          },
+          {
+            "id": "compare-plans",
+            "role": "button",
+            "text": "Compare plans",
+            "x": 324,
+            "y": 414,
+            "w": 180,
+            "h": 52,
+            "cites": "color.accent",
+            "goto": "pricing",
+            "tone": "muted"
+          },
+          {
+            "id": "trial-note",
+            "role": "body",
+            "text": "14-day trial · No credit card required",
+            "x": 80,
+            "y": 480,
+            "w": 520,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "product-preview",
+            "role": "card",
+            "x": 680,
+            "y": 132,
+            "w": 520,
+            "h": 376,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 10,
+            "pad": 28,
+            "children": [
+              {
+                "id": "preview-label",
+                "role": "field-label",
+                "text": "YOUR NEXT RELEASE",
+                "w": 462,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "preview-title",
+                "role": "heading",
+                "text": "Launch, together.",
+                "w": 462,
+                "h": 46,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "preview-status",
+                "role": "badge",
+                "text": "ON TRACK",
+                "w": 116,
+                "h": 28,
+                "cites": "color.accent"
+              },
+              {
+                "id": "preview-milestone",
+                "role": "body",
+                "text": "Customer portal refresh",
+                "w": 462,
+                "h": 28,
+                "cites": "color.text"
+              },
+              {
+                "id": "preview-owner",
+                "role": "body",
+                "text": "Design approved · Maya and 4 teammates",
+                "w": 462,
+                "h": 28,
+                "cites": "color.text",
+                "tone": "muted"
+              },
+              {
+                "id": "preview-next",
+                "role": "body",
+                "text": "Next: hand off the checkout flow to engineering.",
+                "w": 462,
+                "h": 44,
+                "cites": "color.text"
+              },
+              {
+                "id": "preview-link",
+                "role": "button",
+                "text": "See what’s included",
+                "w": 462,
+                "h": 44,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "pricing"
+              }
+            ]
+          },
+          {
+            "id": "feature-brief",
+            "role": "card",
+            "x": 80,
+            "y": 560,
+            "w": 352,
+            "h": 198,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 12,
+            "pad": 24,
+            "children": [
+              {
+                "id": "brief-title",
+                "role": "heading",
+                "text": "One brief.",
+                "w": 302,
+                "h": 44,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "brief-copy",
+                "role": "body",
+                "text": "Keep the problem, customer evidence, and success criteria next to the work.",
+                "w": 302,
+                "h": 72,
+                "cites": "color.text"
+              }
+            ]
+          },
+          {
+            "id": "feature-context",
+            "role": "card",
+            "x": 464,
+            "y": 560,
+            "w": 352,
+            "h": 198,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 12,
+            "pad": 24,
+            "children": [
+              {
+                "id": "context-title",
+                "role": "heading",
+                "text": "Shared context.",
+                "w": 302,
+                "h": 44,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "context-copy",
+                "role": "body",
+                "text": "Connect each decision to the design and the people responsible for shipping it.",
+                "w": 302,
+                "h": 72,
+                "cites": "color.text"
+              }
+            ]
+          },
+          {
+            "id": "feature-progress",
+            "role": "card",
+            "x": 848,
+            "y": 560,
+            "w": 352,
+            "h": 198,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 12,
+            "pad": 24,
+            "children": [
+              {
+                "id": "progress-title",
+                "role": "heading",
+                "text": "Clear next steps.",
+                "w": 302,
+                "h": 44,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "progress-copy",
+                "role": "body",
+                "text": "See what is ready, what is blocked, and what needs a review before release.",
+                "w": 302,
+                "h": 72,
+                "cites": "color.text"
+              }
+            ]
+          },
+          {
+            "id": "footer-rule",
+            "role": "divider",
+            "x": 80,
+            "y": 810,
+            "w": 1120,
+            "h": 1,
+            "cites": "color.border"
+          },
+          {
+            "id": "footer-note",
+            "role": "body",
+            "text": "Example Co · A calmer place to do your best work",
+            "x": 80,
+            "y": 832,
+            "w": 760,
+            "h": 24,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "pricing",
+        "name": "Pricing",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "gap": 24,
+            "pad": 20,
+            "align": "center",
+            "children": [
+              {
+                "id": "nav-brand",
+                "role": "logo",
+                "text": "Example Co",
+                "w": 600,
+                "h": 36,
+                "cites": "color.accent",
+                "goto": "home"
+              },
+              {
+                "id": "nav-pricing",
+                "role": "button",
+                "text": "Pricing",
+                "w": 144,
+                "h": 40,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "pricing"
+              },
+              {
+                "id": "nav-start",
+                "role": "button",
+                "text": "Start your workspace",
+                "w": 220,
+                "h": 40,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "signup"
+              }
+            ]
+          },
+          {
+            "id": "pricing-title",
+            "role": "heading",
+            "text": "A plan for your next chapter.",
+            "x": 80,
+            "y": 140,
+            "w": 1120,
+            "h": 54,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "pricing-subtitle",
+            "role": "body",
+            "text": "Start small. Invite your team when you are ready. Prices shown per month.",
+            "x": 80,
+            "y": 208,
+            "w": 1120,
+            "h": 30,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "plan-starter",
+            "role": "card",
+            "x": 80,
+            "y": 302,
+            "w": 352,
+            "h": 432,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 16,
+            "pad": 24,
+            "children": [
+              {
+                "id": "starter-label",
+                "role": "field-label",
+                "text": "STARTER",
+                "w": 302,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "starter-price",
+                "role": "heading",
+                "text": "$0",
+                "w": 302,
+                "h": 48,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "starter-desc",
+                "role": "body",
+                "text": "For trying a new way to work.",
+                "w": 302,
+                "h": 48,
+                "cites": "color.text",
+                "tone": "muted"
+              },
+              {
+                "id": "starter-rule",
+                "role": "divider",
+                "w": 302,
+                "h": 1,
+                "cites": "color.border"
+              },
+              {
+                "id": "starter-feature1",
+                "role": "body",
+                "text": "3 shared projects",
+                "w": 302,
+                "h": 38,
+                "cites": "color.text"
+              },
+              {
+                "id": "starter-feature2",
+                "role": "body",
+                "text": "Core editor and templates",
+                "w": 302,
+                "h": 38,
+                "cites": "color.text"
+              },
+              {
+                "id": "starter-cta",
+                "role": "button",
+                "text": "Get started",
+                "w": 302,
+                "h": 48,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "signup"
+              }
+            ]
+          },
+          {
+            "id": "plan-team",
+            "role": "card",
+            "x": 464,
+            "y": 302,
+            "w": 352,
+            "h": 432,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 16,
+            "pad": 24,
+            "children": [
+              {
+                "id": "team-label",
+                "role": "field-label",
+                "text": "TEAM",
+                "w": 302,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "team-price",
+                "role": "heading",
+                "text": "$19 / seat",
+                "w": 302,
+                "h": 48,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "team-desc",
+                "role": "body",
+                "text": "For teams shipping every week.",
+                "w": 302,
+                "h": 48,
+                "cites": "color.text",
+                "tone": "muted"
+              },
+              {
+                "id": "team-rule",
+                "role": "divider",
+                "w": 302,
+                "h": 1,
+                "cites": "color.border"
+              },
+              {
+                "id": "team-feature1",
+                "role": "body",
+                "text": "Unlimited shared projects",
+                "w": 302,
+                "h": 38,
+                "cites": "color.text"
+              },
+              {
+                "id": "team-feature2",
+                "role": "body",
+                "text": "Review workflows and history",
+                "w": 302,
+                "h": 38,
+                "cites": "color.text"
+              },
+              {
+                "id": "team-cta",
+                "role": "button",
+                "text": "Try Team",
+                "w": 302,
+                "h": 48,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "signup"
+              }
+            ]
+          },
+          {
+            "id": "plan-enterprise",
+            "role": "card",
+            "x": 848,
+            "y": 302,
+            "w": 352,
+            "h": 432,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 16,
+            "pad": 24,
+            "children": [
+              {
+                "id": "enterprise-label",
+                "role": "field-label",
+                "text": "ENTERPRISE",
+                "w": 302,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "enterprise-price",
+                "role": "heading",
+                "text": "Let’s talk",
+                "w": 302,
+                "h": 48,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "enterprise-desc",
+                "role": "body",
+                "text": "For organization-wide adoption.",
+                "w": 302,
+                "h": 48,
+                "cites": "color.text",
+                "tone": "muted"
+              },
+              {
+                "id": "enterprise-rule",
+                "role": "divider",
+                "w": 302,
+                "h": 1,
+                "cites": "color.border"
+              },
+              {
+                "id": "enterprise-feature1",
+                "role": "body",
+                "text": "Advanced access controls",
+                "w": 302,
+                "h": 38,
+                "cites": "color.text"
+              },
+              {
+                "id": "enterprise-feature2",
+                "role": "body",
+                "text": "Guided rollout and support",
+                "w": 302,
+                "h": 38,
+                "cites": "color.text"
+              },
+              {
+                "id": "enterprise-cta",
+                "role": "button",
+                "text": "Contact our team",
+                "w": 302,
+                "h": 48,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "signup"
+              }
+            ]
+          },
+          {
+            "id": "pricing-back",
+            "role": "button",
+            "text": "← Back to overview",
+            "x": 80,
+            "y": 788,
+            "w": 236,
+            "h": 46,
+            "cites": "color.accent",
+            "goto": "home",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "signup",
+        "name": "Create workspace",
+        "w": 1280,
+        "h": 900,
+        "elements": [
+          {
+            "id": "nav",
+            "role": "nav",
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 82,
+            "cites": "color.border",
+            "layout": "row",
+            "gap": 24,
+            "pad": 20,
+            "align": "center",
+            "children": [
+              {
+                "id": "nav-brand",
+                "role": "logo",
+                "text": "Example Co",
+                "w": 600,
+                "h": 36,
+                "cites": "color.accent",
+                "goto": "home"
+              },
+              {
+                "id": "nav-pricing",
+                "role": "button",
+                "text": "Pricing",
+                "w": 144,
+                "h": 40,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "pricing"
+              },
+              {
+                "id": "nav-start",
+                "role": "button",
+                "text": "Start your workspace",
+                "w": 220,
+                "h": 40,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "signup"
+              }
+            ]
+          },
+          {
+            "id": "signup-heading",
+            "role": "heading",
+            "text": "Make room for better work.",
+            "x": 80,
+            "y": 194,
+            "w": 500,
+            "h": 90,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "signup-description",
+            "role": "body",
+            "text": "Start with a real project. Your team can add its decisions, designs, and reviews as you go.",
+            "x": 80,
+            "y": 310,
+            "w": 470,
+            "h": 96,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "signup-benefit",
+            "role": "badge",
+            "text": "YOUR FIRST 14 DAYS ARE FREE",
+            "x": 80,
+            "y": 444,
+            "w": 262,
+            "h": 30,
+            "cites": "color.accent"
+          },
+          {
+            "id": "signup-proof",
+            "role": "body",
+            "text": "No credit card required. Invite your teammates after setup.",
+            "x": 80,
+            "y": 498,
+            "w": 470,
+            "h": 60,
+            "cites": "color.text"
+          },
+          {
+            "id": "signup-form",
+            "role": "card",
+            "x": 676,
+            "y": 130,
+            "w": 524,
+            "h": 684,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 14,
+            "pad": 28,
+            "children": [
+              {
+                "id": "form-title",
+                "role": "heading",
+                "text": "Create your workspace",
+                "w": 466,
+                "h": 48,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "form-copy",
+                "role": "body",
+                "text": "A few details, then you’re ready to start.",
+                "w": 466,
+                "h": 30,
+                "cites": "color.text",
+                "tone": "muted"
+              },
+              {
+                "id": "name-label",
+                "role": "field-label",
+                "text": "YOUR NAME",
+                "w": 466,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "name-input",
+                "role": "input",
+                "text": "Maya Ortiz",
+                "w": 466,
+                "h": 48,
+                "cites": "color.border"
+              },
+              {
+                "id": "email-label",
+                "role": "field-label",
+                "text": "WORK EMAIL",
+                "w": 466,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "email-input",
+                "role": "input",
+                "text": "maya@example.com",
+                "w": 466,
+                "h": 48,
+                "cites": "color.border"
+              },
+              {
+                "id": "workspace-label",
+                "role": "field-label",
+                "text": "WORKSPACE NAME",
+                "w": 466,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "workspace-input",
+                "role": "input",
+                "text": "Example Co Studio",
+                "w": 466,
+                "h": 48,
+                "cites": "color.border"
+              },
+              {
+                "id": "signup-submit",
+                "role": "button",
+                "text": "Create workspace",
+                "w": 466,
+                "h": 52,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "home"
+              },
+              {
+                "id": "signup-disclaimer",
+                "role": "body",
+                "text": "Prototype: this button returns to the overview. No account is created.",
+                "w": 466,
+                "h": 58,
+                "cites": "color.text",
+                "tone": "muted"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

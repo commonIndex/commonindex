@@ -1,0 +1,9 @@
+# Secret scanning: gitleaks' default rules, plus one reviewed false positive.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Reviewed: not secrets"
+# A made-up 40-character commit hash in a recorded Zoekt response. The
+# Sourcegraph token rule matches any 40 hex characters.
+regexes = ['''58688f4864bffa01505c95e98cfdb6af79c6f708''']

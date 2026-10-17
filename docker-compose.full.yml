@@ -1,0 +1,214 @@
+# The whole platform in Docker, end to end — a LOCAL DEMO:
+#
+# It seeds a sample workspace and builds a sign-in token into the web app, so
+# anyone who can load the page acts as the admin. Never expose it. To deploy,
+# use docker-compose.prod.yml (docs/deploy.md).
+#
+#   docker compose -f docker-compose.full.yml up --build
+#   → http://localhost:5180
+#
+# Postgres, a one-time setup (migrations, sample workspace, admin, dev token),
+# the gateway, the web app, Zoekt code search, and an indexer that re-reads
+# this checkout into Postgres and Zoekt every 30 minutes. Repositories added
+# by URL on the Code query page are re-indexed hourly by the worker, which
+# also renders videos (Chromium and ffmpeg are in its image). The model is NOT in a
+# container: Docker on a Mac has no GPU, so Qwen would run ~10x slower. The
+# gateway calls the Ollama on the host (`make local` or docs/local-model.md
+# starts it) at host.docker.internal.
+#
+# Its own ports (the app on 5180, Postgres 5434, Zoekt 6071) and its own
+# database, so it runs beside `make local` without touching it. Ports bind to
+# loopback; see docker-compose.yml on why that is the default.
+#
+# Reset everything: docker compose -f docker-compose.full.yml down -v
+#
+# Run it from a regular clone. The indexers mount this directory and read its
+# .git; in a `git worktree` .git is a pointer to the main checkout's folder,
+# which is not inside the container, and indexing fails with "not a git
+# repository".
+
+name: commonindex-full
+
+x-model: &model
+  # Docs, artifacts, videos, workspace.ask, code.ask — the host's Ollama.
+  COMMONINDEX_LLM_BASE_URL: http://host.docker.internal:11434/v1
+  COMMONINDEX_LLM_MODEL: qwen3.5:9b
+  COMMONINDEX_LLM_REASONING_EFFORT: none
+  COMMONINDEX_LLM_TIMEOUT_SECONDS: "420"
+  COMMONINDEX_EMBED_BASE_URL: http://host.docker.internal:11434/v1
+  COMMONINDEX_EMBED_MODEL: nomic-embed-text
+  COMMONINDEX_EMBED_DOC_PREFIX: "search_document: "
+  COMMONINDEX_EMBED_QUERY_PREFIX: "search_query: "
+  # Designs. The host is named so the local provider may reach it on Docker's
+  # private address — and only it (commonindex/adapters/model.py).
+  COMMONINDEX_MODEL_PROVIDER: local
+  COMMONINDEX_MODEL_ID: qwen3.5:9b
+  COMMONINDEX_MODEL_BASE_URL: http://host.docker.internal:11434/v1
+  COMMONINDEX_MODEL_LOCAL_HOSTS: host.docker.internal
+  COMMONINDEX_MODEL_REASONING_EFFORT: none
+  COMMONINDEX_MODEL_TIMEOUT_SECONDS: "600"
+
+x-dsn: &dsn
+  COMMONINDEX_DSN: postgresql://commonindex:commonindex@db:5432/commonindex
+
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: commonindex
+      POSTGRES_USER: commonindex
+      POSTGRES_PASSWORD: commonindex
+    ports: ["${BIND_ADDR:-127.0.0.1}:5434:5432"]
+    volumes: [db:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U commonindex -d commonindex"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  # Migrations, the sample workspace, alex as admin, the secret key and the
+  # web app's token. Exits when done; safe to run again.
+  setup:
+    build: {context: ., target: tools}
+    image: commonindex:tools
+    # Root for this one step only: a new named volume is root's, and this is
+    # what writes into it — files the other containers' users can read. Every
+    # long-running service stays the image's non-root user.
+    user: root
+    # Who the app opens as; set COMMONINDEX_DOCKER_ADMIN in .env to keep another.
+    environment: {<<: *dsn, COMMONINDEX_SHARED: /shared, COMMONINDEX_DOCKER_ADMIN: "${COMMONINDEX_DOCKER_ADMIN:-alex}"}
+    command: ["python", "scripts/docker_setup.py"]
+    volumes: [shared:/shared]
+    depends_on: {db: {condition: service_healthy}}
+
+  # The video image: tools plus Chromium, ffmpeg and Node, so the demo renders
+  # videos. The gateway checks it can render; the worker below does it, from the
+  # same image. GATEWAY_TARGET=runtime in .env builds a smaller one without them.
+  gateway:
+    build: {context: ., target: "${GATEWAY_TARGET:-video}"}
+    image: commonindex:${GATEWAY_TARGET:-video}
+    environment:
+      <<: [*dsn, *model]
+      COMMONINDEX_ORIGINS: http://localhost:5180
+      COMMONINDEX_PUBLIC_URL: http://localhost:5180
+      COMMONINDEX_ZOEKT_URL: http://zoekt:6070
+      COMMONINDEX_CODE_ROOTS: /repos
+      # Repositories added by URL are cloned here; the zoekt-indexer below
+      # builds their search index from the same volume.
+      COMMONINDEX_CODE_CLONES: /code/clones
+      COMMONINDEX_ZOEKT_SIDECAR: "1"
+      COMMONINDEX_MEDIA_DIR: /media
+      COMMONINDEX_MAIL_LOG: "1"
+      # Background work runs in the worker service below.
+      COMMONINDEX_WORKER: external
+    # The key comes from the shared volume, so it is never in this file or in
+    # `docker inspect`.
+    command: ["sh", "-c", "COMMONINDEX_SECRET_KEY=$$(cat /shared/secret-key) exec uvicorn commonindex.gateway.app:app --host 0.0.0.0 --port 8000"]
+    volumes:
+      - shared:/shared:ro
+      - media:/media
+      - code:/code
+      - .:/repos/commonindex:ro
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    depends_on: {setup: {condition: service_completed_successfully}}
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request;urllib.request.urlopen('http://localhost:8000/api/v1/_ops')\""]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+
+  # Video renders, page snapshots and code indexing (commonindex/workers/jobs.py).
+  # The gateway's image: video has git, which indexing a repository needs, and
+  # the renderer. With GATEWAY_TARGET=runtime there is no git, so use tools.
+  worker:
+    image: commonindex:${GATEWAY_TARGET:-video}
+    environment:
+      <<: [*dsn, *model]
+      COMMONINDEX_ZOEKT_URL: http://zoekt:6070
+      COMMONINDEX_CODE_ROOTS: /repos
+      COMMONINDEX_CODE_CLONES: /code/clones
+      COMMONINDEX_ZOEKT_SIDECAR: "1"
+      COMMONINDEX_CODE_REFRESH_SECONDS: ${COMMONINDEX_CODE_REFRESH_SECONDS:-3600}
+      COMMONINDEX_MEDIA_DIR: /media
+    command: ["sh", "-c", "COMMONINDEX_SECRET_KEY=$$(cat /shared/secret-key) exec python -m commonindex.workers.jobs"]
+    volumes:
+      - shared:/shared:ro
+      - media:/media
+      - code:/code
+      - .:/repos/commonindex:ro
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    depends_on: {gateway: {condition: service_healthy}}
+
+  web:
+    image: node:22-slim
+    working_dir: /web
+    environment:
+      # The web server forwards /api, /auth, /events and /share to the gateway,
+      # so the browser uses this one port (web/vite.config.ts).
+      GATEWAY_PROXY: http://gateway:8000
+    # node_modules lives in a volume of its own: the host's was installed for
+    # macOS, and esbuild's binary is per platform.
+    # A production build, not the dev server: the dev server sent every page
+    # as ~130 unbundled modules (8.6MB) with React in development mode, which
+    # also runs every page's loading twice. Built on each start, so a restart
+    # picks up the checkout; written outside the mounted source.
+    command: ["sh", "-c", "npm ci --no-audit --no-fund --loglevel=error && VITE_COMMONINDEX_TOKEN=$$(cat /shared/dev-token) npx vite build --outDir /tmp/dist --emptyOutDir && exec npx vite preview --outDir /tmp/dist --host 0.0.0.0 --port 5173 --strictPort"]
+    ports: ["${BIND_ADDR:-127.0.0.1}:5180:5173"]
+    volumes:
+      - ./web:/web
+      - web-modules:/web/node_modules
+      - shared:/shared:ro
+    depends_on: {gateway: {condition: service_healthy}}
+
+  zoekt:
+    image: sourcegraph/zoekt-webserver:latest
+    platform: linux/amd64
+    ports: ["${BIND_ADDR:-127.0.0.1}:6071:6070"]
+    volumes: [zoekt-index:/data/index]
+
+  # Every 30 minutes: this checkout into Postgres (only what changed since the
+  # last pass is written) …
+  indexer:
+    image: commonindex:tools
+    environment: {<<: *dsn, COMMONINDEX_DOCKER_ADMIN: "${COMMONINDEX_DOCKER_ADMIN:-alex}"}
+    # As the workspace admin: indexing grants read on the repository to whoever
+    # indexed it, and the admin is who opens the app here.
+    command: ["sh", "-c", "while true; do date; python scripts/index_repos.py /repos/commonindex --actor $${COMMONINDEX_DOCKER_ADMIN:-alex} || true; sleep 1800; done"]
+    volumes: [".:/repos/commonindex:ro"]
+    depends_on: {setup: {condition: service_completed_successfully}}
+
+  # … and into Zoekt's shards, which the webserver picks up: this checkout and
+  # every repository added by URL (cloned by the worker into the `code`
+  # volume). zoekt-git-index skips a clone whose shard is already at its
+  # commit, so an unchanged one costs nothing.
+  zoekt-indexer:
+    image: sourcegraph/zoekt-indexserver:latest
+    platform: linux/amd64
+    # How often the search index is rebuilt; 30 minutes unless set.
+    environment: {ZOEKT_EVERY_SECONDS: "${ZOEKT_EVERY_SECONDS:-1800}"}
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        git config --global --add safe.directory '*'
+        while true; do
+          date
+          zoekt-git-index -index /data -branches "$$(git -C /repo rev-parse --abbrev-ref HEAD)" /repo || true
+          # Clones sit at clones/<host>/<org>/<repo>.
+          find /code/clones -mindepth 2 -maxdepth 5 -type d -name .git 2>/dev/null | while read -r git; do
+            repo=$${git%/.git}
+            zoekt-git-index -index /data -branches "$$(git -C "$$repo" rev-parse --abbrev-ref HEAD)" "$$repo" || true
+          done
+          sleep "$${ZOEKT_EVERY_SECONDS:-1800}"
+        done
+    volumes:
+      - zoekt-index:/data
+      - .:/repo:ro
+      - code:/code:ro
+
+volumes:
+  db:
+  shared:
+  media:
+  web-modules:
+  zoekt-index:
+  code:

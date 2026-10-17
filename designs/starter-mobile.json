@@ -1,0 +1,746 @@
+{
+  "title": "Starter · Mobile app",
+  "description": "A team task flow: overview, task review, sign-in, and profile, with working navigation.",
+  "template_kind": "layout",
+  "surface": "mobile",
+  "state": "approved",
+  "cites": [],
+  "spec": {
+    "tokens": {
+      "color.bg": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "color.surface": {
+        "$type": "color",
+        "$value": "#f3f6fa"
+      },
+      "color.text": {
+        "$type": "color",
+        "$value": "#172033"
+      },
+      "color.muted": {
+        "$type": "color",
+        "$value": "#64748b"
+      },
+      "color.accent": {
+        "$type": "color",
+        "$value": "#3159dc"
+      },
+      "color.onAccent": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "color.border": {
+        "$type": "color",
+        "$value": "#dde5ee"
+      },
+      "color.danger": {
+        "$type": "color",
+        "$value": "#c2413a"
+      },
+      "radius.md": {
+        "$type": "dimension",
+        "$value": 14
+      },
+      "font.size.body": {
+        "$type": "dimension",
+        "$value": 15
+      },
+      "font.size.heading": {
+        "$type": "dimension",
+        "$value": 26
+      }
+    },
+    "screens": [
+      {
+        "id": "feed",
+        "name": "Overview",
+        "w": 390,
+        "h": 844,
+        "elements": [
+          {
+            "id": "brand",
+            "role": "logo",
+            "text": "Example Co",
+            "x": 24,
+            "y": 28,
+            "w": 268,
+            "h": 32,
+            "cites": "color.accent",
+            "goto": "feed"
+          },
+          {
+            "id": "member",
+            "role": "avatar",
+            "text": "M",
+            "x": 326,
+            "y": 26,
+            "w": 40,
+            "h": 40,
+            "cites": "color.border",
+            "goto": "profile"
+          },
+          {
+            "id": "morning",
+            "role": "heading",
+            "text": "Good morning, Maya",
+            "x": 24,
+            "y": 96,
+            "w": 342,
+            "h": 40,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "today-copy",
+            "role": "body",
+            "text": "Here’s what needs your attention today.",
+            "x": 24,
+            "y": 144,
+            "w": 342,
+            "h": 28,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "focus",
+            "role": "card",
+            "x": 24,
+            "y": 198,
+            "w": 342,
+            "h": 164,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 10,
+            "pad": 20,
+            "children": [
+              {
+                "id": "focus-label",
+                "role": "field-label",
+                "text": "YOUR REVIEW QUEUE",
+                "w": 300,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "focus-count",
+                "role": "heading",
+                "text": "3 tasks to review",
+                "w": 300,
+                "h": 38,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "focus-action",
+                "role": "button",
+                "text": "Review checkout flow",
+                "w": 300,
+                "h": 44,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "item"
+              }
+            ]
+          },
+          {
+            "id": "tasks-heading",
+            "role": "heading",
+            "text": "This week",
+            "x": 24,
+            "y": 392,
+            "w": 342,
+            "h": 38,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "task-1",
+            "role": "card",
+            "x": 24,
+            "y": 448,
+            "w": 342,
+            "h": 116,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 12,
+            "pad": 20,
+            "children": [
+              {
+                "id": "task-1-status",
+                "role": "badge",
+                "text": "READY FOR REVIEW",
+                "w": 154,
+                "h": 24,
+                "cites": "color.accent"
+              },
+              {
+                "id": "task-1-title",
+                "role": "body",
+                "text": "Checkout refresh · Maya",
+                "w": 300,
+                "h": 32,
+                "cites": "color.text",
+                "goto": "item"
+              }
+            ]
+          },
+          {
+            "id": "task-2",
+            "role": "card",
+            "x": 24,
+            "y": 580,
+            "w": 342,
+            "h": 116,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 12,
+            "pad": 20,
+            "children": [
+              {
+                "id": "task-2-status",
+                "role": "badge",
+                "text": "IN PROGRESS",
+                "w": 132,
+                "h": 24,
+                "cites": "color.accent"
+              },
+              {
+                "id": "task-2-title",
+                "role": "body",
+                "text": "Customer portal · Product team",
+                "w": 300,
+                "h": 32,
+                "cites": "color.text",
+                "goto": "item"
+              }
+            ]
+          },
+          {
+            "id": "tabs",
+            "role": "tabbar",
+            "x": 16,
+            "y": 752,
+            "w": 358,
+            "h": 64,
+            "cites": "color.border",
+            "layout": "row",
+            "gap": 6,
+            "pad": 8,
+            "align": "center",
+            "children": [
+              {
+                "id": "tab-home",
+                "role": "button",
+                "text": "Home",
+                "w": 110,
+                "h": 44,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "feed"
+              },
+              {
+                "id": "tab-task",
+                "role": "button",
+                "text": "Task",
+                "w": 110,
+                "h": 44,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "item"
+              },
+              {
+                "id": "tab-profile",
+                "role": "button",
+                "text": "Profile",
+                "w": 110,
+                "h": 44,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "profile"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "item",
+        "name": "Task review",
+        "w": 390,
+        "h": 844,
+        "elements": [
+          {
+            "id": "brand",
+            "role": "logo",
+            "text": "Example Co",
+            "x": 24,
+            "y": 28,
+            "w": 268,
+            "h": 32,
+            "cites": "color.accent",
+            "goto": "feed"
+          },
+          {
+            "id": "task-heading",
+            "role": "heading",
+            "text": "Checkout refresh",
+            "x": 24,
+            "y": 96,
+            "w": 342,
+            "h": 40,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "task-status",
+            "role": "badge",
+            "text": "READY FOR REVIEW",
+            "x": 24,
+            "y": 150,
+            "w": 164,
+            "h": 28,
+            "cites": "color.accent"
+          },
+          {
+            "id": "task-context",
+            "role": "card",
+            "x": 24,
+            "y": 206,
+            "w": 342,
+            "h": 188,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 12,
+            "pad": 20,
+            "children": [
+              {
+                "id": "context-label",
+                "role": "field-label",
+                "text": "THE BRIEF",
+                "w": 300,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "context-summary",
+                "role": "body",
+                "text": "Help returning customers finish checkout without re-entering their delivery details.",
+                "w": 300,
+                "h": 72,
+                "cites": "color.text"
+              },
+              {
+                "id": "context-owner",
+                "role": "body",
+                "text": "Owner: Maya · Design team",
+                "w": 300,
+                "h": 28,
+                "cites": "color.text",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "review-checks",
+            "role": "card",
+            "x": 24,
+            "y": 418,
+            "w": 342,
+            "h": 188,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 8,
+            "pad": 20,
+            "children": [
+              {
+                "id": "checks-label",
+                "role": "field-label",
+                "text": "REVIEW CHECKLIST",
+                "w": 300,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "check-one",
+                "role": "body",
+                "text": "✓ Saved addresses are easy to find",
+                "w": 300,
+                "h": 28,
+                "cites": "color.text"
+              },
+              {
+                "id": "check-two",
+                "role": "body",
+                "text": "✓ Delivery cost appears before payment",
+                "w": 300,
+                "h": 44,
+                "cites": "color.text"
+              },
+              {
+                "id": "check-three",
+                "role": "body",
+                "text": "✓ Confirmation explains the next step",
+                "w": 300,
+                "h": 28,
+                "cites": "color.text"
+              }
+            ]
+          },
+          {
+            "id": "review-done",
+            "role": "button",
+            "text": "Done reviewing →",
+            "x": 24,
+            "y": 634,
+            "w": 342,
+            "h": 52,
+            "cites": "color.accent",
+            "goto": "feed",
+            "tone": "accent"
+          },
+          {
+            "id": "tabs",
+            "role": "tabbar",
+            "x": 16,
+            "y": 752,
+            "w": 358,
+            "h": 64,
+            "cites": "color.border",
+            "layout": "row",
+            "gap": 6,
+            "pad": 8,
+            "align": "center",
+            "children": [
+              {
+                "id": "tab-home",
+                "role": "button",
+                "text": "Home",
+                "w": 110,
+                "h": 44,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "feed"
+              },
+              {
+                "id": "tab-task",
+                "role": "button",
+                "text": "Task",
+                "w": 110,
+                "h": 44,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "item"
+              },
+              {
+                "id": "tab-profile",
+                "role": "button",
+                "text": "Profile",
+                "w": 110,
+                "h": 44,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "profile"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "signin",
+        "name": "Sign in",
+        "w": 390,
+        "h": 844,
+        "elements": [
+          {
+            "id": "brand",
+            "role": "logo",
+            "text": "Example Co",
+            "x": 24,
+            "y": 28,
+            "w": 268,
+            "h": 32,
+            "cites": "color.accent",
+            "goto": "feed"
+          },
+          {
+            "id": "welcome",
+            "role": "heading",
+            "text": "Welcome back",
+            "x": 24,
+            "y": 132,
+            "w": 342,
+            "h": 40,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "signin-copy",
+            "role": "body",
+            "text": "Your team’s work, ready when you are.",
+            "x": 24,
+            "y": 181,
+            "w": 342,
+            "h": 48,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "email-label",
+            "role": "field-label",
+            "text": "WORK EMAIL",
+            "x": 24,
+            "y": 263,
+            "w": 342,
+            "h": 18,
+            "cites": "color.text"
+          },
+          {
+            "id": "email-input",
+            "role": "input",
+            "text": "you@example.com",
+            "x": 24,
+            "y": 293,
+            "w": 342,
+            "h": 52,
+            "cites": "color.border"
+          },
+          {
+            "id": "password-label",
+            "role": "field-label",
+            "text": "PASSWORD",
+            "x": 24,
+            "y": 369,
+            "w": 342,
+            "h": 18,
+            "cites": "color.text"
+          },
+          {
+            "id": "password-input",
+            "role": "input",
+            "text": "••••••••••",
+            "x": 24,
+            "y": 399,
+            "w": 342,
+            "h": 52,
+            "cites": "color.border"
+          },
+          {
+            "id": "signin-submit",
+            "role": "button",
+            "text": "Sign in",
+            "x": 24,
+            "y": 481,
+            "w": 342,
+            "h": 52,
+            "cites": "color.accent",
+            "goto": "feed",
+            "tone": "accent"
+          },
+          {
+            "id": "sso-submit",
+            "role": "button",
+            "text": "Continue with SSO",
+            "x": 24,
+            "y": 549,
+            "w": 342,
+            "h": 52,
+            "cites": "color.accent",
+            "goto": "feed",
+            "tone": "muted"
+          },
+          {
+            "id": "demo-note",
+            "role": "body",
+            "text": "Sample flow — no credentials are sent.",
+            "x": 24,
+            "y": 631,
+            "w": 342,
+            "h": 48,
+            "cites": "color.text",
+            "tone": "muted"
+          }
+        ]
+      },
+      {
+        "id": "profile",
+        "name": "Profile",
+        "w": 390,
+        "h": 844,
+        "elements": [
+          {
+            "id": "brand",
+            "role": "logo",
+            "text": "Example Co",
+            "x": 24,
+            "y": 28,
+            "w": 268,
+            "h": 32,
+            "cites": "color.accent",
+            "goto": "feed"
+          },
+          {
+            "id": "profile-avatar",
+            "role": "avatar",
+            "text": "M",
+            "x": 24,
+            "y": 106,
+            "w": 64,
+            "h": 64,
+            "cites": "color.border"
+          },
+          {
+            "id": "profile-name",
+            "role": "heading",
+            "text": "Maya Ortiz",
+            "x": 108,
+            "y": 104,
+            "w": 258,
+            "h": 38,
+            "cites": "font.size.heading"
+          },
+          {
+            "id": "profile-email",
+            "role": "body",
+            "text": "maya@example.com",
+            "x": 108,
+            "y": 148,
+            "w": 258,
+            "h": 28,
+            "cites": "color.text",
+            "tone": "muted"
+          },
+          {
+            "id": "workspace",
+            "role": "card",
+            "x": 24,
+            "y": 212,
+            "w": 342,
+            "h": 176,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 12,
+            "pad": 20,
+            "children": [
+              {
+                "id": "workspace-label",
+                "role": "field-label",
+                "text": "YOUR WORKSPACE",
+                "w": 300,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "workspace-name",
+                "role": "heading",
+                "text": "Example Co Studio",
+                "w": 300,
+                "h": 38,
+                "cites": "font.size.heading"
+              },
+              {
+                "id": "workspace-role",
+                "role": "body",
+                "text": "Product designer · 12 teammates",
+                "w": 300,
+                "h": 44,
+                "cites": "color.text",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "id": "preferences",
+            "role": "card",
+            "x": 24,
+            "y": 414,
+            "w": 342,
+            "h": 178,
+            "cites": "color.border",
+            "layout": "column",
+            "gap": 12,
+            "pad": 20,
+            "children": [
+              {
+                "id": "preferences-label",
+                "role": "field-label",
+                "text": "PREFERENCES",
+                "w": 300,
+                "h": 18,
+                "cites": "color.text"
+              },
+              {
+                "id": "preferences-digest",
+                "role": "body",
+                "text": "Daily digest · Every weekday at 9:00",
+                "w": 300,
+                "h": 40,
+                "cites": "color.text"
+              },
+              {
+                "id": "preferences-reviews",
+                "role": "body",
+                "text": "Review notifications · Enabled",
+                "w": 300,
+                "h": 40,
+                "cites": "color.text"
+              }
+            ]
+          },
+          {
+            "id": "signout",
+            "role": "button",
+            "text": "Sign out",
+            "x": 24,
+            "y": 636,
+            "w": 342,
+            "h": 52,
+            "cites": "color.accent",
+            "goto": "signin",
+            "tone": "muted"
+          },
+          {
+            "id": "tabs",
+            "role": "tabbar",
+            "x": 16,
+            "y": 752,
+            "w": 358,
+            "h": 64,
+            "cites": "color.border",
+            "layout": "row",
+            "gap": 6,
+            "pad": 8,
+            "align": "center",
+            "children": [
+              {
+                "id": "tab-home",
+                "role": "button",
+                "text": "Home",
+                "w": 110,
+                "h": 44,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "feed"
+              },
+              {
+                "id": "tab-task",
+                "role": "button",
+                "text": "Task",
+                "w": 110,
+                "h": 44,
+                "cites": "color.accent",
+                "tone": "muted",
+                "goto": "item"
+              },
+              {
+                "id": "tab-profile",
+                "role": "button",
+                "text": "Profile",
+                "w": 110,
+                "h": 44,
+                "cites": "color.accent",
+                "tone": "accent",
+                "goto": "profile"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "project",
+  "label": "Project",
+  "plural": "Projects",
+  "schema": {
+    "type": "object",
+    "required": ["title"],
+    "properties": {
+      "title":       { "type": "string", "minLength": 1, "maxLength": 120, "pattern": "\\S",
+                       "description": "What the work is called: Legacy billing → new services." },
+      "description": { "type": ["string", "null"], "maxLength": 2000,
+                       "description": "What it is for and what done looks like — the line people read before joining in." },
+      "color":       { "enum": ["blue", "green", "amber", "red", "violet", "teal", "gray"],
+                       "description": "The chip's color, so a project reads the same on every card." },
+      "status":      { "enum": ["active", "done", "archived"],
+                       "description": "active: work is going on. done: it shipped. archived: kept, but no longer offered when tagging." }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "title",
+    "subtitle": ["status"],
+    "preview": "description",
+    "status": "status"
+  },
+  "facets": [
+    { "kind": "enum", "field": "status", "values": ["active", "done", "archived"] }
+  ],
+  "measures": [],
+  "prose": ["title", "description"],
+  "relations": ["*.in_project.project"],
+  "version": 1,
+  "status": "ratified",
+  "_note": "A tag with a page. Anything in the space — a task, a doc, a design, a video, an experiment, a dashboard — is put in a project by an `in_project` edge from it to the project (projects.tag), so one project gathers every kind of work, and one item may be in several. Open to the whole workspace, like a label: a project names work, it does not hide it. What a reader may open inside it is still each item's own sharing."
+}

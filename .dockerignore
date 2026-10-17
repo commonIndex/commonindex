@@ -1,0 +1,29 @@
+.git/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+node_modules/
+web/
+*.tsbuildinfo
+build/
+.DS_Store
+.claude/
+docs/
+backend/
+
+# Settings and secrets never go into an image.
+.env
+.env.*
+*.pem
+*.key
+deploy/k8s/local/secret.yaml
+
+# Local data, logs and clones: never part of a build.
+.media/
+.local-logs/
+.code-clones/
+.local/

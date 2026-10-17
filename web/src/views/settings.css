@@ -1,0 +1,25 @@
+/* The Sign-in settings page: who needs to sign in, and each way in. */
+
+.signin-settings { display: grid; gap: 28px; padding: 12px 0 40px; }
+.signin-settings section { display: grid; gap: 12px; max-width: 760px; }
+.signin-settings h2 { margin: 0; font-size: 15px; }
+.signin-settings .invite-roles { margin: 0; }
+.signin-settings .invite-roles:disabled { opacity: .7; }
+
+.signin-methods { list-style: none; margin: 0; padding: 0; display: grid; border: 1px solid var(--border); border-radius: 12px; }
+.signin-method { display: grid; gap: 6px; padding: 14px 16px; }
+.signin-method + .signin-method { border-top: 1px solid var(--border); }
+.signin-method p { margin: 0; font-size: 13px; color: var(--text2); line-height: 1.5; }
+.signin-method-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.signin-method-head b { font-size: 14px; }
+.signin-state {
+  flex: none; padding: 2px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 600;
+  color: var(--text2); background: var(--panel2); border: 1px solid var(--border);
+}
+.signin-state.on { color: var(--accent); background: var(--accent-bg); border-color: transparent; }
+.signin-how { margin: 0; font-size: 13px; color: var(--text2); line-height: 1.6; }
+.signin-how code, .signin-method code { font-size: 12px; }
+.signin-warn { color: var(--warn) !important; }
+.signin-redirect { display: grid; gap: 4px; font-size: 12.5px; color: var(--text2); }
+.signin-redirect .invite-link { margin: 0; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

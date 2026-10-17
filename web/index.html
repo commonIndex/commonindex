@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CommonIndex</title>
+    <meta name="description" content="Where agents work alongside your team." />
+    <!-- Inline, so there is no second request and no 404 in the console on
+         every page load. The mark is the one from the topbar. -->
+    <!-- Geist from Google Fonts, loaded without blocking: as a plain
+         stylesheet it held the app's own code back ~200ms on every first load.
+         Text draws in the fallback face and swaps when the font arrives. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" /></noscript>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='23' fill='%232563eb'/%3E%3Crect x='16' y='20' width='68' height='60' rx='12' fill='%23fff'/%3E%3Ccircle cx='32' cy='38' r='7' fill='%23bfd3fb'/%3E%3Cpath d='M45 38H70' stroke='%232563eb' stroke-width='5' stroke-linecap='round'/%3E%3Crect x='25' y='55' width='14' height='14' rx='4' fill='%232563eb'/%3E%3Cpath d='M32 57.4Q33.3 60.7 36.6 62Q33.3 63.3 32 66.6Q30.7 63.3 27.4 62Q30.7 60.7 32 57.4Z' fill='%23fff'/%3E%3Cpath d='M45 62H62' stroke='%232563eb' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

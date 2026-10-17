@@ -1,0 +1,298 @@
+{
+  "id": "experiment",
+  "label": "Experiment",
+  "plural": "Experiments",
+  "doc": [
+    "An experiment is an object whose CONTRACT is frozen and whose state is not.",
+    "Everything under `contract` is pre-registration: what was going to be",
+    "measured, on which units, against which split, for how long, decided before",
+    "any data was seen. The readout reads the contract rather than its own",
+    "request arguments, which is what makes the primary question un-switchable",
+    "after the fact. Everything outside `contract` is live state and moves.",
+    "",
+    "This is also what makes an experiment reviewable by somebody who was not",
+    "there: 'you registered conversion at 14 days and are reading revenue at",
+    "day 6' is a mechanical comparison, not a judgement call."
+  ],
+  "schema": {
+    "type": "object",
+    "required": [
+      "name",
+      "metric",
+      "status",
+      "days"
+    ],
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "hypothesis": {
+        "type": "string"
+      },
+      "space": {
+        "type": "string"
+      },
+      "owner": {
+        "type": "string"
+      },
+      "metric": {
+        "type": "string",
+        "x-ref": "metric"
+      },
+      "status": {
+        "enum": [
+          "draft",
+          "running",
+          "readout",
+          "shipped",
+          "killed",
+          "iterated"
+        ]
+      },
+      "day": {
+        "type": "integer"
+      },
+      "days": {
+        "type": "integer"
+      },
+      "lift": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "description": "LAST OBSERVED lift, cached so a list of 240 rows does not run 240 readouts. Not authoritative and never a basis for a decision: `experiments.readout` recomputes it, applies the sample-ratio gate, and is the only thing that may be acted on. Paired with lift_at so staleness is visible rather than implied."
+      },
+      "lift_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time"
+      },
+      "guardrail": {
+        "enum": [
+          "clean",
+          "watch",
+          "breach"
+        ]
+      },
+      "better": {
+        "enum": ["up", "down"],
+        "description": "Which way the cached lift is good, carried from the metric the last recorded readout cited."
+      },
+      "srm_passed": {
+        "type": ["boolean", "null"],
+        "description": "Whether the last recorded readout's sample-ratio check passed. Null when it could not run."
+      },
+      "last_readout": {
+        "type": ["string", "null"],
+        "description": "The most recently recorded readout object. A decision cites a readout; this is the default one."
+      },
+      "started_at": {
+        "type": ["string", "null"],
+        "format": "date-time",
+        "description": "When traffic really started, set by experiments.start. Every readout of a started experiment reads from here, not from 'the last 30 days'. For an experiment registered while already running this is in the past."
+      },
+      "stopped_at": {
+        "type": ["string", "null"],
+        "format": "date-time",
+        "description": "When it stopped, set by experiments.stop or experiments.decide. Readouts read up to here and no further."
+      },
+      "decision": {
+        "type": ["object", "null"],
+        "description": "What was decided, by whom, and on which recorded readout. Written only by experiments.decide, alongside a decision object in the graph.",
+        "properties": {
+          "outcome": { "enum": ["ship", "kill", "iterate"] },
+          "rationale": { "type": "string" },
+          "by": { "type": "string" },
+          "at": { "type": "string", "format": "date-time" },
+          "readout_id": { "type": ["string", "null"] },
+          "decision_id": { "type": "string" },
+          "lift": { "type": ["number", "null"] },
+          "srm_passed": { "type": ["boolean", "null"] }
+        }
+      },
+      "contract": {
+        "type": "object",
+        "description": "Pre-registration, frozen at start. The readout resolves these instead of trusting the caller, so the primary metric cannot be swapped after the numbers are visible.",
+        "properties": {
+          "connection_id": {
+            "type": "string"
+          },
+          "dataset_id": {
+            "type": "string"
+          },
+          "variation": {
+            "type": "string",
+            "description": "Column naming the arm."
+          },
+          "unit": {
+            "type": "string",
+            "description": "Column the experiment randomised on. Without it every count counts ROWS, which makes intervals too narrow and inflates the sample-ratio statistic."
+          },
+          "control": {
+            "type": "string"
+          },
+          "weights": {
+            "type": "object",
+            "description": "The DESIGNED split, arm -> weight. Required for anything but an even split: a deliberate 90/10 holdout checked against an assumed 50/50 fails its sample-ratio check every time."
+          },
+          "outcome": {
+            "type": "string",
+            "description": "Column carrying the primary outcome."
+          },
+          "binary": {
+            "type": "boolean"
+          },
+          "metric_id": {
+            "type": "string",
+            "x-ref": "metric"
+          },
+          "metric_version": {
+            "type": "integer",
+            "description": "PINNED. A dashboard cites a metric id and follows the current ratified meaning, which is right for 'what is our refund rate now'. An experiment must not: if the definition is re-ratified mid-flight, the readout would answer a different question from the registered one. So this pins the version in force at registration."
+          },
+          "guardrails": {
+            "type": "array",
+            "description": "Frozen too \u2014 a guardrail added after seeing data was not pre-registered.",
+            "items": {
+              "type": "object",
+              "required": [
+                "outcome"
+              ],
+              "properties": {
+                "outcome": {
+                  "type": "string"
+                },
+                "metric_id": {
+                  "type": "string",
+                  "x-ref": "metric"
+                },
+                "metric_version": {
+                  "type": "integer"
+                },
+                "binary": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "alpha": {
+            "type": "number",
+            "minimum": 0.0001,
+            "maximum": 0.5
+          },
+          "mde": {
+            "type": "number",
+            "description": "Minimum effect worth detecting, as a RELATIVE fraction \u2014 0.02 means a 2% lift, on the same scale as the readout's `lift`, not 2 percentage points. Not used in the arithmetic; it is what makes 'no difference detected' readable as underpowered rather than as flat."
+          },
+          "planned_days": {
+            "type": "integer"
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "registered_by": {
+            "type": "string"
+          },
+          "unit_agg": {
+            "enum": [
+              "sum",
+              "max",
+              "min",
+              "avg",
+              "count"
+            ],
+            "description": "How a unit's several rows collapse to one observation. Frozen, because it decides what the number IS: revenue per user summed and revenue per user averaged are different experiments."
+          },
+          "cap": {
+            "type": "number",
+            "description": "Winsorise each unit's value before aggregating. Frozen \u2014 choosing a cap after seeing which outliers landed in which arm is p-hacking with extra steps."
+          },
+          "null_is_zero": {
+            "type": "boolean",
+            "description": "Whether a unit with no matching outcome rows counts as zero. For revenue per exposed user it does: they were exposed and spent nothing. For a latency guardrail where a null means missing instrumentation it does not, and imputing zero understates by however much is missing."
+          },
+          "sequential": {
+            "type": "boolean",
+            "description": "Whether the interval is always-valid \u2014 an anytime confidence sequence rather than a fixed-horizon t interval. FROZEN, because it is the error-control regime and not a way of looking at the evidence. Read at n=10,000 with 1000 vs 1089 conversions, the sequence gives (-0.052, +0.230) and the fixed interval (+0.0005, +0.177): the same data, 'no difference detected' and 'better'. Choosing after seeing which one says 'better' is the whole thing pre-registration prevents."
+          },
+          "tuning": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "The sample size the confidence sequence is tightest at. FROZEN for the same reason as `sequential`: it sets the width of the interval, and an interval whose width is chosen after the data is not a guarantee about anything."
+          },
+          "threshold": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "The p below which the split is called broken. FROZEN. It is not a reading choice: an SRM failure overrides the verdict with 'no answer', so a threshold chosen afterwards is a way to make the override go away. 0.001 by default, not 0.05 \u2014 this is a check run on every readout, and at 0.05 one experiment in twenty is condemned for nothing."
+          }
+        },
+        "required": [
+          "connection_id",
+          "dataset_id",
+          "variation",
+          "outcome"
+        ]
+      }
+    }
+  },
+  "presenting": {
+    "key": "key",
+    "title": "name",
+    "subtitle": [
+      "space",
+      "metric"
+    ],
+    "preview": "hypothesis",
+    "status": "status"
+  },
+  "facets": [
+    {
+      "kind": "enum",
+      "field": "status"
+    },
+    {
+      "kind": "enum",
+      "field": "space"
+    },
+    {
+      "kind": "enum",
+      "field": "guardrail",
+      "attention": [
+        "watch",
+        "breach"
+      ]
+    },
+    {
+      "kind": "actor",
+      "field": "owner"
+    }
+  ],
+  "measures": [
+    {
+      "name": "lift",
+      "field": "lift",
+      "agg": "avg",
+      "unit": "pct",
+      "better": "up"
+    }
+  ],
+  "prose": [
+    "name",
+    "hypothesis"
+  ],
+  "parts": [
+    "registration",
+    "readouts",
+    "decisions"
+  ],
+  "relations": [
+    "experiment.decides.metric",
+    "experiment.tested_by.flag"
+  ],
+  "version": 2,
+  "status": "ratified"
+}
