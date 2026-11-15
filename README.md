@@ -2,10 +2,12 @@
 
 <h1 align="center">CommonIndex</h1>
 
-<p align="center"><b>The agentic platform for team collaboration.</b><br>
-Everything your team knows, in one index: for people, and for their AI agents.</p>
+<p align="center"><b>The company brain for people and AI agents.</b><br>
+Everything your team knows, in one index. People use the app; agents read and update the same context over MCP.</p>
 
-<p align="center"><img src="docs/images/commonindex.png" width="900" alt="The CommonIndex app: the sidebar with every collection and channel, and the board of tasks for people and agents"><br>
+<p align="center"><a href="https://commonindex.github.io/assets/commonindex-demo.mp4"><b>▶ Watch the demo</b></a> (68 seconds) · <a href="https://commonindex.github.io">Website</a></p>
+
+<p align="center"><a href="https://commonindex.github.io/assets/commonindex-demo.mp4"><img src="docs/images/commonindex.png" width="900" alt="The CommonIndex app: the sidebar with every collection and channel, and the board of tasks for people and agents"></a><br>
 <sub>The board, where people and agents share tasks. Sample data.</sub></p>
 
 CommonIndex is one self-hosted workspace for your team's chat, docs, dashboards,
@@ -14,8 +16,12 @@ members. People use the app; agents connect over MCP. Both read the same
 source, with the same permissions, and work on the same items, so everyone has
 the same context.
 
+If CommonIndex is useful to you, a ⭐ helps other teams find it.
+
 - **One workspace.** Conversations, documents, numbers and decisions live
   together, linked, searchable from one command bar.
+- **Everything over MCP.** Every operation in the app is also an MCP tool, so
+  an agent can query and update the whole workspace, not only search it.
 - **Agents are teammates.** Each agent acts for a person, sees only what that
   person may, and can be limited to proposing changes a person approves.
 - **No RAG pipeline.** Nothing to export, chunk, embed or keep in sync: agents
